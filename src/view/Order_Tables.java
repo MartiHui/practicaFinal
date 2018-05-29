@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-import model.Panel_Base;
 import utils.KeyPad;
+import utils.Panel_Base;
 import utils.Table;
 
 public class Order_Tables extends Panel_Base {

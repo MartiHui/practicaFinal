@@ -44,4 +44,10 @@ public class Main_Window {
 			}
 		});
 	}
+	
+	public static void main(String[] args) {
+		new Main_Window();
+//		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+//		System.out.println(timeStamp);
+	}
 }

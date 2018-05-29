@@ -3,38 +3,31 @@ package model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import utils.Model_Base;
+
 public class Category extends Model_Base {
 	private static String table_name = "categories";
 	private static String[] columns = new String[] {
-			"category_name",
-			"isMenu"
-			};
+			"category_name"};
 	private static char[] value_types = new char[] {
-			's',
-			'i'
-			};
+			's'};
 	
 	public Integer category_id;
 	public String category_name;
-	public int isMenu;
 	
-	private Category(Integer category_id, String category_name, int isMenu) {
+	private Category(Integer category_id, String category_name) {
 		this.category_id = category_id;
 		this.category_name = category_name;
-		this.isMenu = isMenu;
 	}
 	
 	public static Category load(Integer id) {
-		if (id == null) {
-			return null;
-		}
-		
 		ResultSet rs = Model_Base.load(table_name, "category_id", id);
 		Category c = null;
 		
 		try {
 			if (rs != null) {
-				c = new Category(id, rs.getString("category_name"), rs.getInt("isMenu"));
+				c = new Category(id,
+						rs.getString("category_name"));
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getErrorCode() 
@@ -62,8 +55,7 @@ public class Category extends Model_Base {
 	
 	public void update() {
 		Object[] values = new Object[] {
-				this.category_name, 
-				this.isMenu};
+				this.category_name};
 		
 		super.update(table_name, values, columns, value_types, "category_id", category_id);
 	}

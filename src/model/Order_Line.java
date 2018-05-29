@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+import utils.Model_Base;
+
 public class Order_Line extends Model_Base {
 	private static String table_name = "order_lines";
 	private static String[] columns = new String[] {
@@ -30,7 +32,9 @@ public class Order_Line extends Model_Base {
 	public String comment;
 	
 	
-	
+	/*
+	 * Constructor para obtener objetos de la base de datos
+	 */
 	private Order_Line(int order_line_id, Order order, Product product, BigDecimal price,
 			int quantity, String comment) {
 		this.order_line_id = order_line_id;
@@ -40,8 +44,11 @@ public class Order_Line extends Model_Base {
 		this.comment = comment;
 		this.quantity = quantity;
 	}
-
-	public Order_Line(Order order, Product product, String comment, int quantity, boolean isLocal) {
+	
+	/*
+	 * Constructor para crear líneas de pedido cuyo precio depende de si el pedido es local o no
+	 */
+	public Order_Line(Order order, Product product, String comment, Integer quantity, boolean isLocal) {
 		this.order = order;
 		this.product = product;
 		this.price = isLocal?product.price_local:product.price_away;
@@ -49,7 +56,10 @@ public class Order_Line extends Model_Base {
 		this.quantity = quantity;
 	}
 	
-	public Order_Line(Order order, Product product, String comment, int quantity, BigDecimal price) {
+	/*
+	 * Constructor para crear línea de pedido con un precio diferente al original del producto
+	 */
+	public Order_Line(Order order, Product product, String comment, Integer quantity, BigDecimal price) {
 		this.order = order;
 		this.product = product;
 		this.price = price;
@@ -58,10 +68,6 @@ public class Order_Line extends Model_Base {
 	}
 	
 	public static Order_Line load(Integer id) {
-		if (id == null) {
-			return null;
-		}
-		
 		ResultSet rs = Model_Base.load(table_name, "order_line_id", id);
 		Order_Line ol = null;
 		
@@ -88,8 +94,7 @@ public class Order_Line extends Model_Base {
 				product.product_id,
 				price,
 				quantity,
-				comment
-		};
+				comment};
 		
 		Model_Base.insert(table_name, values, columns, value_types);
 	}
@@ -98,7 +103,7 @@ public class Order_Line extends Model_Base {
 		LinkedList<Order_Line> lines = new LinkedList<>();
 		ResultSet rs = Model_Base.find(table_name, false,
 				new String[] {"order_id"},
-				new String[] {"="},
+				new String[] {" = "},
 				new Object[] {order_id},
 				new char[] {'i'});
 		

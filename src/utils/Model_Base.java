@@ -1,6 +1,4 @@
-package model;
-
-import utils.DB_Connection;
+package utils;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -11,6 +9,10 @@ import java.sql.SQLException;
 public abstract class Model_Base {
 	
 	public static ResultSet load(String table_name, String id_name, Integer id) {
+		if (id == null) {
+			return null;
+		}
+		
 		DB_Connection.connect();
 		PreparedStatement pstm;
 		ResultSet rs;

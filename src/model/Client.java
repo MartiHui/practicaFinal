@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import utils.Fecha;
+import utils.Model_Base;
 
 public class Client extends Model_Base {
 	private static String table_name = "clients";
@@ -11,14 +12,12 @@ public class Client extends Model_Base {
 			"last_address",
 			"last_order",
 			"phone_number",
-			"comment"
-			};
+			"comment"};
 	private static char[] value_types = new char[] {
 			'i',
 			'd',
 			's',
-			's'
-			};
+			's'};
 	
 	public int client_id;
 	public Address last_address;
@@ -26,8 +25,8 @@ public class Client extends Model_Base {
 	public String phone_number;
 	public String comment;
 	
-	private Client(int client_id, Address last_address, Fecha last_order, String phone_number, String comment) {
-		super();
+	private Client(int client_id, Address last_address, Fecha last_order,
+			String phone_number, String comment) {
 		this.client_id = client_id;
 		this.last_address = last_address;
 		this.last_order = last_order;
@@ -36,10 +35,6 @@ public class Client extends Model_Base {
 	}
 	
 	public static Client load(Integer id) {
-		if (id == null) {
-			return null;
-		}
-		
 		ResultSet rs = Model_Base.load(table_name, "client_id", id);
 		Client c = null;
 		Fecha f = new Fecha();
@@ -80,11 +75,10 @@ public class Client extends Model_Base {
 	
 	public void update() {
 		Object[] values = new Object[] {
-				last_address.address_id,
+				(last_address==null)?null:last_address.address_id,
 				new java.sql.Date(last_order.getTimeInMillis()),
 				phone_number,
-				comment
-			};
+				comment};
 		
 		super.update(table_name, values, columns, value_types, "client_id", client_id);
 	}

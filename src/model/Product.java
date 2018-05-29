@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 import utils.DB_Connection;
+import utils.Model_Base;
 
 public class Product extends Model_Base {
 	private static String table_name = "products";
@@ -43,10 +44,6 @@ public class Product extends Model_Base {
 	}
 	
 	public static Product load(Integer id) {
-		if (id == null) {
-			return null;
-		}
-		
 		ResultSet rs = Model_Base.load(table_name, "product_id", id);
 		Product p = null;
 		
@@ -168,42 +165,31 @@ public class Product extends Model_Base {
 		return p;
 	}
 	
+	public int findTimesOrdered() {
+		int times_ordered = 0;
+		ResultSet rs = Model_Base.find(table_name, false,
+				new String[] {"product_id"}, 
+				new String[] {"="},
+				new Object[] {this.product_id},
+				new char[] {'i'});
+		
+		if (rs != null) {
+			try {
+				times_ordered = rs.getInt("times_ordered");
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return times_ordered;
+	}
+	
 	public static Category getCategory(Integer category_id) {
 		if (category_id == null) {
 			return null;
 		} else {
 			return Category.load(category_id);
 		}
-	}
-	
-	public LinkedList<Product> getMenuContents() {
-		if (this.category.isMenu == 0) {
-			return null;
-		}
-		
-		DB_Connection.connect();
-		PreparedStatement pstm;
-		ResultSet rs;
-		
-		String query = "SELECT content_id, quantity FROM menu_content WHERE product_id = ?";
-		LinkedList<Product> contents = new LinkedList<>();
-		
-		try {
-			pstm = DB_Connection.con.prepareStatement(query);
-			pstm.setInt(1, this.product_id);
-			
-			rs = pstm.executeQuery();
-			
-			while (rs.next()) {
-				for (int i = 0; i < rs.getInt("quantity"); i++) {
-					contents.add(Product.load(rs.getInt("content_id")));
-				}
-			}
-		} catch (SQLException e) {
-			System.err.println(e.getErrorCode() 
-					+ " - " + e.getLocalizedMessage());
-		}
-		
-		return contents;
 	}
 }
