@@ -2,24 +2,30 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
+
+import javax.swing.Timer;
 
 import model.Order;
 
 public class Order_Tables {
 	public view.Order_Tables ot_view;
 	public LinkedList<Order> localOrders;
-	public LinkedList<Away_Order> awayOrders;
+	public LinkedList<Order> awayOrders;
 	
 	public Order_Tables() {
 		ot_view = new view.Order_Tables();
 		localOrders = new LinkedList<>();
 		awayOrders = new LinkedList<>();
-		consoleController();
-	}
-	
-	public void consoleController() {
+		
 		consoleControllerKeyPad();
+		updateDate();
+		fillTables();
+		tableListeners();
 	}
 	
 	private void consoleControllerKeyPad() {
@@ -125,21 +131,90 @@ public class Order_Tables {
 	}
 	
 	private void manageOrder(String console) {
+		Order currentOrder;
+		
 		if (console.length() == 9) {
+			currentOrder = insideAwayOrders(console);
 			
+			if (currentOrder == null) {
+				currentOrder = new Order(console, null);
+				awayOrders.add(currentOrder);
+			}
+			
+			// TODO manage away order
 		} else if (console.length() > 0 && console.length() < 4) {
+			currentOrder = insideLocalOrders(console);
 			
+			if (currentOrder == null) {
+				currentOrder = new Order(null, Integer.parseInt(console));
+				localOrders.add(currentOrder);
+			}
+			
+			// TODO manage local order
 		}
 	}
 	
-	public static Away_Order insideOf(LinkedList<Away_Order> orders, String identifier) {
-		for (Away_Order o : orders) {
-			if (identifier.equals(o.order.client.phone_number)) {
+	private void tableListeners() {
+		ot_view.localTable.tabla.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount()==2) {
+					manageOrder((String) ot_view.localTable.getValueSelected(0));
+				}
+			}
+		});
+		
+		ot_view.awayTable.tabla.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount()==2) {
+					manageOrder((String) ot_view.localTable.getValueSelected(0));
+				}
+			}
+		});
+	}
+	
+	private Order insideAwayOrders(String console) {
+		for (Order o : awayOrders) {
+			if (console.equals(o.client.phone_number)) {
 				return o;
 			}
 		}
 		
 		return null;
+	}
+	
+	private Order insideLocalOrders(String console) {
+		for (Order o : localOrders) {
+			if (console.equals(Integer.toString(o.num_table))) {
+				return o;
+			}
+		}
+		
+		return null;
+	}
+	
+	private void updateDate() {
+		int interval = 1000;
+		new Timer(interval, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ot_view.date.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+				ot_view.datetime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+			}
+		}).start();
+	}
+	
+	private void fillTables() {
+		for (Order o : localOrders) {
+			ot_view.localTable.modelo.addRow(
+					new Object[] {Integer.toString(o.num_table), o.date.stringReloj(), o.total_amount});
+		}
+		
+		for (Order o : awayOrders) {
+			ot_view.awayTable.modelo.addRow(
+					new Object[] {o.client.phone_number, o.date.stringReloj(), o.total_amount});
+		}
 	}
 
 }

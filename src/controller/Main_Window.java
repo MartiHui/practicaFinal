@@ -9,14 +9,20 @@ import java.awt.event.WindowEvent;
 
 public class Main_Window {
 	public view.Main_Window mw_view;
+	
 	public Order_Tables ot_controller;
+	
 	public KeyEventDispatcher keyEventDispatcher;
+	private int currentPanel;
 	
 	public Main_Window() {
 		mw_view = new view.Main_Window();
 		ot_controller = new Order_Tables();
+		
 		mw_view.getContentPane().add(BorderLayout.CENTER, ot_controller.ot_view);
 		keyBoardController();
+		
+		currentPanel = 1;
 		
 		mw_view.repaint();
 		mw_view.revalidate();
@@ -27,8 +33,10 @@ public class Main_Window {
 			  @Override
 			  public boolean dispatchKeyEvent(final KeyEvent e) {
 			    if (e.getID() == KeyEvent.KEY_TYPED) {
-					//mw.console.setText(Integer.toString(e.getKeyChar()));
-					ot_controller.consoleEvent(e.getKeyChar());
+					if (currentPanel == 1) {
+						//mw.console.setText(Integer.toString(e.getKeyChar()));
+						ot_controller.consoleEvent(e.getKeyChar());
+					}
 			    }
 			    return false;
 			  }
@@ -47,7 +55,5 @@ public class Main_Window {
 	
 	public static void main(String[] args) {
 		new Main_Window();
-//		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-//		System.out.println(timeStamp);
 	}
 }

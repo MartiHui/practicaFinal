@@ -61,7 +61,7 @@ public class Order extends Model_Base {
 	}
 	
 	// Constructor para el controlador
-	public Order(String phone_number, Integer num_table, Fecha date) {
+	public Order(String phone_number, Integer num_table) {
 		if (phone_number != null) {
 			this.client = Client.find(phone_number);
 			this.address = client.last_address;
@@ -70,7 +70,7 @@ public class Order extends Model_Base {
 			this.address = null;
 		}
 		this.num_table = num_table;
-		this.date = date;
+		this.date = new Fecha();
 		this.total_amount = BigDecimal.valueOf(0);
 		this.discount = 0;
 

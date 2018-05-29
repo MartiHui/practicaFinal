@@ -16,6 +16,9 @@ import javax.swing.Timer;
 import utils.KeyPad;
 import utils.Panel_Base;
 import utils.Table;
+import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Order_Tables extends Panel_Base {
 	/**
@@ -24,8 +27,6 @@ public class Order_Tables extends Panel_Base {
 	private static final long serialVersionUID = 4185438257464370072L;
 	public JLabel date;
 	public JLabel datetime;
-	public JTable table;
-	public JTable table_1;
 	public JScrollPane localPane;
 	public Table localTable;
 	public Table awayTable;
@@ -47,7 +48,6 @@ public class Order_Tables extends Panel_Base {
 	public Order_Tables() {
 		super();
 		createElements();
-		updateDate();
 	}
 	
 	private void createElements() {
@@ -183,17 +183,6 @@ public class Order_Tables extends Panel_Base {
 		
 		keypad_9 = new KeyPad(initialX + ((num-1)%3)*jumpX, initialY + (((num-1)/3)%3)*jumpY, Integer.toString(num++));
 		add(keypad_9);
-	}
-	
-	private void updateDate() {
-		int interval = 1000;
-		new Timer(interval, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				date.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-				datetime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-			}
-		}).start();
 	}
 }
 
