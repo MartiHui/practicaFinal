@@ -1,32 +1,21 @@
 package view;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 
-import utils.KeyPad;
-import utils.Panel_Base;
-import utils.Table;
-import javax.swing.JButton;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import base_classes.KeyPad;
+import base_classes.Panel_Base;
+import base_classes.Table;
 
 public class Order_Tables extends Panel_Base {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4185438257464370072L;
-	public JLabel date;
-	public JLabel datetime;
 	public JScrollPane localPane;
 	public Table localTable;
 	public Table awayTable;
@@ -51,29 +40,9 @@ public class Order_Tables extends Panel_Base {
 	}
 	
 	private void createElements() {
-		createClock();
 		createOrderTables();
 		createConsole();
 		createKeypad();
-	}
-	
-	private void createClock() {
-		int width = 340;
-		int height = 30;
-		int initialX = 1050;
-		int initialY = 50;
-		
-		date = new JLabel("");
-		date.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		date.setHorizontalAlignment(SwingConstants.CENTER);
-		date.setBounds(initialX, initialY, width, height);
-		add(date);
-		
-		datetime = new JLabel("");
-		datetime.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		datetime.setHorizontalAlignment(SwingConstants.CENTER);
-		datetime.setBounds(initialX, initialY+height, width, height);
-		add(datetime);
 	}
 	
 	private void createOrderTables() {

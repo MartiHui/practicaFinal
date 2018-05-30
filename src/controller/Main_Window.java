@@ -7,17 +7,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import view.Order_Manager;
+
 public class Main_Window {
 	public view.Main_Window mw_view;
 	
 	public Order_Tables ot_controller;
+	public controller.Order_Manager om_controller;
 	
 	public KeyEventDispatcher keyEventDispatcher;
-	private int currentPanel;
+	public int currentPanel;
 	
 	public Main_Window() {
 		mw_view = new view.Main_Window();
-		ot_controller = new Order_Tables();
+		ot_controller = new Order_Tables(this);
 		
 		mw_view.getContentPane().add(BorderLayout.CENTER, ot_controller.ot_view);
 		keyBoardController();

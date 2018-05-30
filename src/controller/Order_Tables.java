@@ -1,29 +1,27 @@
 package controller;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
-
-import javax.swing.Timer;
 
 import model.Order;
 
 public class Order_Tables {
+	public Main_Window main;
 	public view.Order_Tables ot_view;
 	public LinkedList<Order> localOrders;
 	public LinkedList<Order> awayOrders;
 	
-	public Order_Tables() {
+	public Order_Tables(Main_Window main) {
+		this.main = main;
 		ot_view = new view.Order_Tables();
 		localOrders = new LinkedList<>();
 		awayOrders = new LinkedList<>();
 		
 		consoleControllerKeyPad();
-		updateDate();
 		fillTables();
 		tableListeners();
 	}
@@ -141,7 +139,7 @@ public class Order_Tables {
 				awayOrders.add(currentOrder);
 			}
 			
-			// TODO manage away order
+			executeManageOrder(currentOrder);
 		} else if (console.length() > 0 && console.length() < 4) {
 			currentOrder = insideLocalOrders(console);
 			
@@ -150,8 +148,17 @@ public class Order_Tables {
 				localOrders.add(currentOrder);
 			}
 			
-			// TODO manage local order
+			executeManageOrder(currentOrder);
 		}
+	}
+	
+	private void executeManageOrder(Order order) {
+		main.om_controller = new Order_Manager(order);
+		main.mw_view.remove(main.ot_controller.ot_view);
+		main.mw_view.getContentPane().add(BorderLayout.CENTER, main.om_controller.view);
+		main.mw_view.repaint();
+		main.mw_view.revalidate();
+		main.currentPanel = 2;
 	}
 	
 	private void tableListeners() {
@@ -192,17 +199,6 @@ public class Order_Tables {
 		}
 		
 		return null;
-	}
-	
-	private void updateDate() {
-		int interval = 1000;
-		new Timer(interval, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ot_view.date.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-				ot_view.datetime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-			}
-		}).start();
 	}
 	
 	private void fillTables() {

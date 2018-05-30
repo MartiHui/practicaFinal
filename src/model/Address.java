@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-import utils.Model_Base;
+import base_classes.Model_Base;
 
 public class Address extends Model_Base {
 	private static String table_name = "addresses";
@@ -70,13 +70,40 @@ public class Address extends Model_Base {
 		return a;
 	}
 	
-	public static LinkedList<Address> find(String value) {
+	public static LinkedList<Address> findByName(String value) {
 		LinkedList<Address> addresses = new LinkedList<>();
 		ResultSet rs = Model_Base.find(table_name, true,
 				new String[] {"address_name"},
-				new String[] {"LIKE"},
+				new String[] {" LIKE "},
 				new Object[] {"%"+value+"%"},
 				new char[] {'s'});
+		
+		if (rs != null) {
+			try {
+				do {
+					addresses.add(new Address(
+							rs.getInt("address_id"),
+							rs.getString("address_name"),
+							rs.getString("address_details"),
+							rs.getString("zone"),
+							rs.getString("comment")));
+				} while (rs.next());
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return addresses;
+	}
+	
+	public static LinkedList<Address> findByClient(Client client) {
+		LinkedList<Address> addresses = new LinkedList<>();
+		ResultSet rs = Model_Base.find(table_name, true,
+				new String[] {"client_id"},
+				new String[] {" = "},
+				new Object[] {client.client_id},
+				new char[] {'i'});
 		
 		if (rs != null) {
 			try {
@@ -108,7 +135,15 @@ public class Address extends Model_Base {
 	}
 	
 	public String toString() {
-		return String.format("%s %s (%s)", this.address_name, this.address_details, this.zone);
+		return this.address_name;
+	}
+	
+	public String fullAddress() {
+		String s = String.format("%s %s", this.address_name, this.address_details);
+		if (this.zone != null && !this.zone.equals("")) {
+			s += "(" + this.zone + ")";
+		}
+		return s;
 	}
 
 }
