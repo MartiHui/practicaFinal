@@ -2,6 +2,7 @@ package base_classes;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,19 +25,25 @@ public class Panel_Base extends JPanel {
 	public Panel_Base() {
 		int width = 1440;
 		int height = 900;
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Dimension monitor = tk.getScreenSize();
-		Dimension ventana = new Dimension(width, height);
-		
-		this.setBounds((monitor.width-ventana.width)/2,
-				(monitor.height-ventana.height)/2,
-				ventana.width, ventana.height);
+		this.setBounds(centrar(width, height));
 		
 		setLayout(null);
 		createClock();
 		updateDate();
 		repaint();
 		revalidate();
+	}
+	
+	public static Rectangle centrar(int width, int height) {
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension monitor = tk.getScreenSize();
+		Dimension ventana = new Dimension(width, height);
+		
+		Rectangle r = new Rectangle((monitor.width-ventana.width)/2,
+				(monitor.height-ventana.height)/2,
+				ventana.width, ventana.height);
+		
+		return r;
 	}
 	
 	private void createClock() {

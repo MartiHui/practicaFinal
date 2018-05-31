@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
 import view.Order_Manager;
 
 public class Main_Window {
-	public view.Main_Window mw_view;
+	public view.Main_Window view;
 	
 	public Order_Tables ot_controller;
 	public controller.Order_Manager om_controller;
@@ -19,16 +19,16 @@ public class Main_Window {
 	public int currentPanel;
 	
 	public Main_Window() {
-		mw_view = new view.Main_Window();
+		view = new view.Main_Window();
 		ot_controller = new Order_Tables(this);
 		
-		mw_view.getContentPane().add(BorderLayout.CENTER, ot_controller.ot_view);
+		view.getContentPane().add(BorderLayout.CENTER, ot_controller.view);
 		keyBoardController();
 		
 		currentPanel = 1;
 		
-		mw_view.repaint();
-		mw_view.revalidate();
+		view.repaint();
+		view.revalidate();
 	}
 	
 	private void keyBoardController() {
@@ -48,7 +48,7 @@ public class Main_Window {
 
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(keyEventDispatcher);
 
-		mw_view.addWindowListener(new WindowAdapter() {
+		view.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(keyEventDispatcher);

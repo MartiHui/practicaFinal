@@ -165,6 +165,34 @@ public class Product extends Model_Base {
 		return p;
 	}
 	
+	public static LinkedList<Product> findByCategory(Integer id) {
+		LinkedList<Product> products = new LinkedList<Product>();
+		ResultSet rs = Model_Base.find(table_name, false, 
+				new String[] {"category_id"}, 
+				new String[] {" = "},
+				new Object[] {id},
+				new char[] {'i'});
+		
+		if (rs != null) {
+			try {
+				do {
+					products.add(new Product(
+							rs.getInt("product_id"),
+							getCategory((Integer) rs.getObject("category_id")),
+							rs.getString("code"),
+							rs.getString("product_name"),
+							BigDecimal.valueOf(rs.getFloat("price_local")),
+							BigDecimal.valueOf(rs.getFloat("price_away"))));
+				} while (rs.next());
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return products;
+	}
+	
 	public int findTimesOrdered() {
 		int times_ordered = 0;
 		ResultSet rs = Model_Base.find(table_name, false,
@@ -191,5 +219,9 @@ public class Product extends Model_Base {
 		} else {
 			return Category.load(category_id);
 		}
+	}
+	
+	public String toString() {
+		return this.product_name;
 	}
 }

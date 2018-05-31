@@ -1,7 +1,9 @@
 package model;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 import base_classes.Model_Base;
 
@@ -53,6 +55,30 @@ public class Category extends Model_Base {
 		return c;
 	}
 	
+	public static LinkedList<Category> find() {
+		LinkedList<Category> categories = new LinkedList<Category>();
+		ResultSet rs = Model_Base.find(table_name, false, 
+				new String[] {"1"}, 
+				new String[] {" = "},
+				new Object[] {1},
+				new char[] {'i'});
+		
+		if (rs != null) {
+			try {
+				do {
+					categories.add(new Category(
+							rs.getInt("category_id"),
+							rs.getString("category_name")));
+				} while (rs.next());
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return categories;
+	}
+	
 	public void update() {
 		Object[] values = new Object[] {
 				this.category_name};
@@ -62,5 +88,9 @@ public class Category extends Model_Base {
 	
 	public void delete() {
 		super.delete(table_name, "category_id", this.category_id);
+	}
+	
+	public String toString() {
+		return this.category_name;
 	}
 }

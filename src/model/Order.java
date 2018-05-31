@@ -133,11 +133,21 @@ public class Order extends Model_Base {
 		if (lines.contains(product)) {
 			lines.get(lines.indexOf(product)).quantity += quantity;
 		} else {
-			lines.add(product);
-			product.quantity = quantity;
+			boolean found = false;
+			for (Order_Line ol : this.lines) {
+				if (Order_Line.isSame(product, ol)) {
+					found = true;
+					ol.quantity += quantity;
+					break;
+				}
+			}
+			if (!found) {
+				lines.add(product);
+				product.quantity = quantity;
+			}
 		}
-		
-		total_amount.add(product.price.multiply(BigDecimal.valueOf(quantity)));
+
+		total_amount = total_amount.add(product.price.multiply(BigDecimal.valueOf(quantity)));
 	}
 	
 	public void removeProduct(Order_Line product, int quantity) {
@@ -149,7 +159,7 @@ public class Order extends Model_Base {
 			lines.remove(ol);
 		}
 		
-		total_amount.subtract(product.price.multiply(BigDecimal.valueOf(quantity)));
+		total_amount = total_amount.subtract(product.price.multiply(BigDecimal.valueOf(quantity)));
 	}
 	
 	public void getOrderLines() {

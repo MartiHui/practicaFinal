@@ -15,6 +15,7 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.TableRowSorter;
 
 import base_classes.Panel_Base;
 import base_classes.Table;
@@ -22,13 +23,17 @@ import model.Address;
 import model.Product;
 
 import java.awt.Insets;
+import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Order_Manager extends Panel_Base {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8126866025712551977L;
-	public JTextField commentText;
 	public JScrollPane orderPane;
 	public Table orderTable;
 	public JTextField console;
@@ -45,7 +50,7 @@ public class Order_Manager extends Panel_Base {
 	public JButton orderEnd;
 	public JButton goBack;
 	public JButton commentButton;
-	public JComboBox<Category> categoryBox;
+	public JComboBox<model.Category> categoryBox;
 	public JComboBox<Product> productBox;
 	public JButton modifyAddress;
 	public JButton addAddress;
@@ -55,6 +60,10 @@ public class Order_Manager extends Panel_Base {
 	public JLabel tableText;
 	public JLabel dateText;
 	public JLabel discountLabel;
+	public JScrollPane commentPane;
+	public JTextArea commentText;
+	public JButton addComment;
+	public JButton addPrice;
 	
 	public Order_Manager(boolean isLocal) {
 		super();
@@ -79,16 +88,20 @@ public class Order_Manager extends Panel_Base {
 	}
 	
 	private void createCommentSection() {
-		commentText = new JTextField();
-		commentText.setEditable(false);
-		commentText.setBounds(144, 121, 818, 42);
-		add(commentText);
-		commentText.setColumns(10);
-		
 		commentButton = new JButton("Comentario: ");
 		commentButton.setMargin(new Insets(2, 2, 2, 2));
 		commentButton.setBounds(64, 121, 70, 42);
 		add(commentButton);
+		
+		commentText = new JTextArea();
+		commentText.setEditable(false);
+		commentText.setText("");
+		commentText.setLineWrap(true);
+		
+		commentPane = new JScrollPane();
+		commentPane.setBounds(144, 121, 818, 42);
+		commentPane.setViewportView(commentText);
+		add(commentPane);
 	}
 	
 	private void createLinesTable() {
@@ -98,7 +111,7 @@ public class Order_Manager extends Panel_Base {
 		
 		orderTable = new Table(new String[] {"product_id", "Cantidad", "Código", "Producto", "Precio", "Detalles", "", ""},
 				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, BigDecimal.class, String.class, String.class, String.class},
-				new Integer[] {0, 10, 20, 100, 50, 15, 15, 15},
+				new Integer[] {0, 3, 3, 100, 250, 3, 3, 3},
 				null,
 				null,
 				null);
@@ -107,6 +120,7 @@ public class Order_Manager extends Panel_Base {
 		orderTable.alinear('l', 2);
 		orderTable.alinear('l', 3);
 		orderTable.alinear('r', 4);
+		orderTable.tabla.getTableHeader().setEnabled(false);
 		orderPane.setViewportView(orderTable.tabla);
 	}
 	
@@ -127,42 +141,42 @@ public class Order_Manager extends Panel_Base {
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setMinimumSize(new Dimension(10, 10));
-		separator_1.setBounds(972, 445, 458, 14);
+		separator_1.setBounds(972, 545, 458, 14);
 		add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setMinimumSize(new Dimension(10, 10));
-		separator_2.setBounds(972, 338, 458, 14);
+		separator_2.setBounds(972, 430, 458, 14);
 		add(separator_2);
 		
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setMinimumSize(new Dimension(10, 10));
-		separator_3.setBounds(972, 669, 458, 14);
+		separator_3.setBounds(972, 759, 458, 14);
 		add(separator_3);
 	}
 	
 	private void createPriceSection() {
 		JLabel totalLabel = new JLabel("TOTAL:");
-		totalLabel.setBounds(972, 363, 46, 14);
+		totalLabel.setBounds(972, 449, 46, 14);
 		add(totalLabel);
 		
 		totalText = new JLabel("");
 		totalText.setFont(new Font("Tahoma", Font.BOLD, 27));
-		totalText.setBounds(972, 374, 201, 60);
+		totalText.setBounds(972, 474, 201, 60);
 		add(totalText);
 		
 		discountLabel = new JLabel("DESCUENTO:");
-		discountLabel.setBounds(1183, 363, 82, 14);
+		discountLabel.setBounds(1183, 449, 82, 14);
 		add(discountLabel);
 		
 		discountText = new JLabel("");
 		discountText.setFont(new Font("Tahoma", Font.BOLD, 27));
-		discountText.setBounds(1183, 374, 201, 60);
+		discountText.setBounds(1183, 474, 201, 60);
 		add(discountText);
 	}
 	
 	private void createProductSection() {
-		categoryBox = new JComboBox<Category>();
+		categoryBox = new JComboBox<model.Category>();
 		categoryBox.setBounds(972, 196, 201, 60);
 		add(categoryBox);
 		
@@ -172,17 +186,17 @@ public class Order_Manager extends Panel_Base {
 		
 		productButton = new JButton("A\u00F1adir...");
 		productButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		productButton.setBounds(1183, 267, 247, 60);
+		productButton.setBounds(972, 348, 458, 60);
 		add(productButton);
 		
 		plusQuantity = new JButton("+");
 		plusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		plusQuantity.setBounds(972, 267, 60, 60);
+		plusQuantity.setBounds(1113, 267, 60, 60);
 		add(plusQuantity);
 		
 		minusQuantity = new JButton("-");
 		minusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		minusQuantity.setBounds(1113, 267, 60, 60);
+		minusQuantity.setBounds(972, 267, 60, 60);
 		add(minusQuantity);
 		
 		quantity = new JLabel("1");
@@ -195,11 +209,11 @@ public class Order_Manager extends Panel_Base {
 	
 	private void createButtons() {
 		addDiscount = new JButton("A\u00F1adir descuento");
-		addDiscount.setBounds(972, 480, 158, 76);
+		addDiscount.setBounds(972, 570, 158, 76);
 		add(addDiscount);
 		
 		newProduct = new JButton("Crear nuevo producto");
-		newProduct.setBounds(1140, 479, 176, 76);
+		newProduct.setBounds(1140, 570, 176, 76);
 		add(newProduct);
 		
 		eliminate = new JButton("");
@@ -207,11 +221,11 @@ public class Order_Manager extends Panel_Base {
 		add(eliminate);
 		
 		ticket = new JButton("Sacar ticket");
-		ticket.setBounds(972, 567, 158, 91);
+		ticket.setBounds(972, 657, 158, 91);
 		add(ticket);
 		
 		orderEnd = new JButton("Finalizar pedido");
-		orderEnd.setBounds(1140, 566, 176, 92);
+		orderEnd.setBounds(1140, 656, 176, 92);
 		add(orderEnd);
 		
 		goBack = new JButton("");
@@ -257,13 +271,25 @@ public class Order_Manager extends Panel_Base {
 		dateText = new JLabel("");
 		dateText.setFont(new Font("Tahoma", Font.BOLD, 30));
 		dateText.setHorizontalAlignment(SwingConstants.CENTER);
-		dateText.setBounds(972, 683, 437, 60);
+		dateText.setBounds(972, 784, 437, 60);
 		add(dateText);
+		
+		addComment = new JButton("Comentario");
+		addComment.setBounds(1183, 267, 104, 60);
+		add(addComment);
+		
+		addPrice = new JButton("Precio");
+		addPrice.setBounds(1305, 267, 104, 60);
+		add(addPrice);
 	}
 	
 	private void createLocalElements() {
 		tableText = new JLabel("");
 		tableText.setBounds(160, 37, 46, 14);
 		add(tableText);
+	}
+	
+	public void resetQuantity() {
+		this.quantity.setText("1");
 	}
 }

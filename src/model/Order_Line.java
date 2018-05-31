@@ -134,4 +134,20 @@ public class Order_Line extends Model_Base {
 		return Product.load(id);
 	}
 	
+	public static boolean isSame(Order_Line ol1, Order_Line ol2) {
+		return ((ol1.product.product_id.equals(ol2.product.product_id)) &&
+				(ol1.comment.equals(ol2.comment)) &&
+				(ol1.price.equals(ol2.price)));
+	}
+	
+	public boolean insideOf(LinkedList<Order_Line> ols) {
+		for (Order_Line ol : ols) {
+			if (Order_Line.isSame(this, ol)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }
