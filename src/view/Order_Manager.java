@@ -109,17 +109,20 @@ public class Order_Manager extends Panel_Base {
 		orderPane.setBounds(81, 173, 881, 671);
 		add(orderPane);
 		
-		orderTable = new Table(new String[] {"product_id", "Cantidad", "Código", "Producto", "Precio", "Detalles", "", ""},
-				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, BigDecimal.class, String.class, String.class, String.class},
-				new Integer[] {0, 3, 3, 100, 250, 3, 3, 3},
+		orderTable = new Table(new String[] {"product_id", "Cantidad", "Código", "Producto", "Precio/ud", "Precio total", "Detalles", "", ""},
+				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class},
+				new Integer[] {0, 3, 3, 100, 125, 125, 3, 3, 3},
 				null,
 				null,
 				null);
 		orderTable.hideColumn(0);
 		orderTable.alinear('l', 1);
 		orderTable.alinear('l', 2);
-		orderTable.alinear('l', 3);
+		orderTable.alinear('r', 3);
 		orderTable.alinear('r', 4);
+		orderTable.alinear('c', 5);
+		orderTable.alinear('c', 6);
+		orderTable.alinear('c', 7);
 		orderTable.tabla.getTableHeader().setEnabled(false);
 		orderPane.setViewportView(orderTable.tabla);
 	}
@@ -127,8 +130,8 @@ public class Order_Manager extends Panel_Base {
 	private void createConsole() {
 		console = new JTextField();
 		console.setBorder(new LineBorder(new Color(0, 0, 0)));
-		console.setEditable(false);
 		console.setBounds(972, 121, 458, 42);
+		console.grabFocus();
 		add(console);
 		console.setColumns(10);
 	}
@@ -184,7 +187,7 @@ public class Order_Manager extends Panel_Base {
 		productBox.setBounds(1183, 196, 247, 60);
 		add(productBox);
 		
-		productButton = new JButton("A\u00F1adir...");
+		productButton = new JButton("A\u00F1adir...(Enter)");
 		productButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		productButton.setBounds(972, 348, 458, 60);
 		add(productButton);
@@ -274,11 +277,11 @@ public class Order_Manager extends Panel_Base {
 		dateText.setBounds(972, 784, 437, 60);
 		add(dateText);
 		
-		addComment = new JButton("Comentario");
+		addComment = new JButton("Comentario(F1)");
 		addComment.setBounds(1183, 267, 104, 60);
 		add(addComment);
 		
-		addPrice = new JButton("Precio");
+		addPrice = new JButton("Precio(F2)");
 		addPrice.setBounds(1305, 267, 104, 60);
 		add(addPrice);
 	}

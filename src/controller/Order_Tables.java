@@ -120,6 +120,7 @@ public class Order_Tables {
 		}
 		
 		if (ascii == 10) {
+			view.console.setText("");
 			manageOrder(consoleContent);
 		}
 	}
@@ -153,7 +154,7 @@ public class Order_Tables {
 	}
 	
 	private void executeManageOrder(Order order) {
-		main.om_controller = new Order_Manager(order);
+		main.om_controller = new Order_Manager(order, main);
 		main.view.remove(main.ot_controller.view);
 		main.view.getContentPane().add(BorderLayout.CENTER, main.om_controller.view);
 		main.view.repaint();
@@ -201,7 +202,9 @@ public class Order_Tables {
 		return null;
 	}
 	
-	private void fillTables() {
+	public void fillTables() {
+		view.localTable.modelo.setRowCount(0);
+		view.awayTable.modelo.setRowCount(0);
 		for (Order o : localOrders) {
 			view.localTable.modelo.addRow(
 					new Object[] {Integer.toString(o.num_table), o.date.stringReloj(), o.total_amount});

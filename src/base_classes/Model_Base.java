@@ -193,6 +193,8 @@ public abstract class Model_Base {
 						break;
 							
 					case 'b':
+						pstm.setNull(i+1, java.sql.Types.DECIMAL);
+						break;
 					case 'f':
 						pstm.setNull(i+1, java.sql.Types.FLOAT);
 						break;
@@ -216,7 +218,7 @@ public abstract class Model_Base {
 						break;
 						
 					case 'b':
-						pstm.setFloat(i+1, ((BigDecimal) values[i]).floatValue());
+						pstm.setBigDecimal(i+1, ((BigDecimal) values[i]));
 						break;
 						
 					case 'd':

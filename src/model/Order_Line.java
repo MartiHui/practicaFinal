@@ -76,7 +76,7 @@ public class Order_Line extends Model_Base {
 				ol = new Order_Line(id,
 						getOrder(rs.getInt("order_id")),
 						getProduct(rs.getInt("product_id")),
-						BigDecimal.valueOf(rs.getFloat("price")),
+						rs.getBigDecimal("price"),
 						rs.getInt("quantity"),
 						rs.getString("comment"));
 			}
@@ -113,7 +113,7 @@ public class Order_Line extends Model_Base {
 					lines.add(new Order_Line(rs.getInt("order_line_id"),
 							getOrder(rs.getInt("order_id")),
 							getProduct(rs.getInt("product_id")),
-							BigDecimal.valueOf(rs.getFloat("price")),
+							rs.getBigDecimal("price"),
 							rs.getInt("quantity"),
 							rs.getString("comment")));
 				} while (rs.next());

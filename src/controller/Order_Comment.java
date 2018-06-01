@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Order_Comment {
-	protected view.Comment view;
+	protected view.Order_Comment view;
 	public Order_Manager om;
+	private Main_Window main;
 	
-	public Order_Comment(Order_Manager om, String s) {
+	public Order_Comment(Order_Manager om, String s, Main_Window main) {
+		this.main = main;
 		this.om = om;
-		view = new view.Comment(s);
+		view = new view.Order_Comment(s);
 		
 		buttonsListeners();
 		
@@ -21,7 +23,8 @@ public class Order_Comment {
 		view.save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				om.order.comment = view.commentText.getText();
-				om.view.commentText.setText(om.order.comment);;
+				om.view.commentText.setText(om.order.comment);
+				main.currentPanel = 2;
 				exit();
 			}
 		});

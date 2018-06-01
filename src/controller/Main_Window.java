@@ -35,12 +35,20 @@ public class Main_Window {
 		keyEventDispatcher = new KeyEventDispatcher() {
 			  @Override
 			  public boolean dispatchKeyEvent(final KeyEvent e) {
-			    if (e.getID() == KeyEvent.KEY_TYPED) {
+				if (e.getID() == KeyEvent.KEY_PRESSED) {
 					if (currentPanel == 1) {
 						//mw.console.setText(Integer.toString(e.getKeyChar()));
 						ot_controller.consoleEvent(e.getKeyChar());
+					} else if (currentPanel == 2) {
+						if (e.getKeyCode() == KeyEvent.VK_F1) {
+							om_controller.newComment();
+						} else if (e.getKeyCode() == KeyEvent.VK_F2) {
+							om_controller.newPrice();
+						} else {
+							om_controller.consoleEvent(e.getKeyChar());
+						}
 					}
-			    }
+				}
 			    return false;
 			  }
 			};

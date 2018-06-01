@@ -94,7 +94,7 @@ public class Order extends Model_Base {
 						getAddress((Integer) rs.getObject("address_id")),
 						(Integer) rs.getObject("num_table"),
 						f,
-						BigDecimal.valueOf(rs.getFloat("total_amount")),
+						rs.getBigDecimal("total_amount"),
 						rs.getInt("discount"),
 						rs.getString("comment"));
 			}

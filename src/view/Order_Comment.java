@@ -3,8 +3,6 @@ package view;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import model.Order;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -12,7 +10,7 @@ import base_classes.Panel_Base;
 
 import javax.swing.JButton;
 
-public class Comment extends JDialog{
+public class Order_Comment extends JDialog{
 	/**
 	 * 
 	 */
@@ -22,7 +20,7 @@ public class Comment extends JDialog{
 	public JButton cancel;
 	public JButton save;
 	
-	public Comment(String s) {
+	public Order_Comment(String s) {
 		this.s = s;
 		
 		properties();

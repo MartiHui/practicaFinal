@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Font;
+import java.math.BigDecimal;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -58,7 +59,7 @@ public class Order_Tables extends Panel_Base {
 		add(localPane);
 		
 		localTable = new Table(new String[] {"Mesa nº", "Hora", "Total"},
-				new Class<?>[] {String.class, String.class, String.class},
+				new Class<?>[] {String.class, String.class, BigDecimal.class},
 				new Integer[] {column, column, column},
 				null,
 				null,
@@ -73,7 +74,7 @@ public class Order_Tables extends Panel_Base {
 		add(awayPane);
 		
 		awayTable = new Table(new String[] {"Teléfono", "Hora", "Total"},
-				new Class<?>[] {String.class, String.class, String.class},
+				new Class<?>[] {String.class, String.class, BigDecimal.class},
 				new Integer[] {column, column, column},
 				null,
 				null,

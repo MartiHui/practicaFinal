@@ -53,8 +53,8 @@ public class Product extends Model_Base {
 						getCategory((Integer) rs.getObject("category_id")),
 						rs.getString("code"),
 						rs.getString("product_name"),
-						BigDecimal.valueOf(rs.getFloat("price_local")),
-						BigDecimal.valueOf(rs.getFloat("price_away")));
+						rs.getBigDecimal("price_local"),
+						rs.getBigDecimal("price_away"));
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getErrorCode() 
@@ -127,8 +127,8 @@ public class Product extends Model_Base {
 							getCategory((Integer) rs.getObject("category_id")),
 							rs.getString("code"),
 							rs.getString("product_name"),
-							BigDecimal.valueOf(rs.getFloat("price_local")),
-							BigDecimal.valueOf(rs.getFloat("price_away"))));
+							rs.getBigDecimal("price_local"),
+							rs.getBigDecimal("price_away")));
 				} while (rs.next());
 			} catch (SQLException e) {
 				System.err.println(e.getErrorCode() 
@@ -154,8 +154,8 @@ public class Product extends Model_Base {
 						getCategory((Integer) rs.getObject("category_id")),
 						rs.getString("code"),
 						rs.getString("product_name"),
-						BigDecimal.valueOf(rs.getFloat("price_local")),
-						BigDecimal.valueOf(rs.getFloat("price_away")));
+						rs.getBigDecimal("price_local"),
+						rs.getBigDecimal("price_away"));
 			} catch (SQLException e) {
 				System.err.println(e.getErrorCode() 
 						+ " - " + e.getLocalizedMessage());
@@ -181,8 +181,8 @@ public class Product extends Model_Base {
 							getCategory((Integer) rs.getObject("category_id")),
 							rs.getString("code"),
 							rs.getString("product_name"),
-							BigDecimal.valueOf(rs.getFloat("price_local")),
-							BigDecimal.valueOf(rs.getFloat("price_away"))));
+							rs.getBigDecimal("price_local"),
+							rs.getBigDecimal("price_away")));
 				} while (rs.next());
 			} catch (SQLException e) {
 				System.err.println(e.getErrorCode() 
