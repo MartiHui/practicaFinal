@@ -37,6 +37,7 @@ public class Order_Manager {
 		createTableListeners();
 		createProductListeners();
 		returnAndCancel();
+		buttonsListeners();
 	}
 	
 	public void fillData() {
@@ -136,20 +137,27 @@ public class Order_Manager {
 			view.discountText.setVisible(false);
 			view.discountLabel.setVisible(false);
 		} else {
-			view.discountText.setText(Integer.toString(order.discount));
+			view.discountText.setVisible(true);
+			view.discountLabel.setVisible(true);
+			view.discountText.setText(Integer.toString(order.discount) + "%");
 		}
 	}
 	
 	private void createProductListeners() {
-		LinkedList<Category> categories = Category.find();
-		for (Category c : categories) {
-			view.categoryBox.addItem(c);
-		}
-		
-		if (view.categoryBox.getComponentCount() > 0) {
-			LinkedList<Product> products = Product.findByCategory(((Category) view.categoryBox.getItemAt(0)).category_id);
-			for (Product p : products)
-				view.productBox.addItem(p);
+		try {
+			LinkedList<Category> categories = Category.find();
+			for (Category c : categories) {
+				view.categoryBox.addItem(c);
+			}
+			
+			if (view.categoryBox.getComponentCount() > 0) {
+				LinkedList<Product> products = Product.findByCategory(((Category) view.categoryBox.getItemAt(0)).category_id);
+				for (Product p : products)
+					view.productBox.addItem(p);
+			}
+		} catch (Exception e1) {
+			System.out.println("No hay productos ni categorias");
+			e1.printStackTrace();
 		}
 		
 		view.categoryBox.addActionListener(new ActionListener() {
@@ -206,6 +214,7 @@ public class Order_Manager {
 	
 	private void addProduct() {
 		Order_Line ol;
+		
 		if (modifiedPrice) {
 			ol = new Order_Line(this.order,
 					((Product) view.productBox.getSelectedItem()),
@@ -258,7 +267,7 @@ public class Order_Manager {
 	
 	public void returnAndCancel() {
 		view.goBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				if (order.lines.isEmpty()) {
 					destroy();
 				}
@@ -267,7 +276,7 @@ public class Order_Manager {
 		});
 		
 		view.eliminate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				destroy();
 				exit();
 			}
@@ -289,5 +298,71 @@ public class Order_Manager {
 		} else {
 			main.ot_controller.localOrders.remove(order);
 		}
+	}
+	
+	private void buttonsListeners() {
+		view.addDiscount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int num = Integer.parseInt(view.console.getText());
+					if (num < 0) {
+						throw new Exception();
+					}
+					order.discount = num;
+				} catch (Exception ex) {}
+				view.console.setText("");
+				actPriceSection();
+			}
+		});
+		
+		view.newProduct.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				createNewProduct();
+			}
+		});
+		
+		view.ticket.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				order.ticketOut = true;
+			}
+		});
+		
+		view.orderEnd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertOrder();
+			}
+		});
+	}
+	
+	private void insertOrder() {
+		order.insert();
+		destroy();
+		exit();
+	}
+	
+	private void createNewProduct() {
+		String name = view.console.getText();
+		Product p = Product.insert(new Object[] {
+				null,
+				0,
+				name,
+				product_price==null?BigDecimal.valueOf(0):product_price,
+				product_price==null?BigDecimal.valueOf(0):product_price,
+				0});
+		
+		Order_Line ol;
+		ol = new Order_Line(this.order,
+				p,
+				this.product_comment,
+				Integer.parseInt(view.quantity.getText()),
+				this.product_price);
+		modifiedPrice = false;
+		
+		view.console.setText("");
+		this.product_comment = "";
+		view.resetQuantity();
+		
+		this.order.addProduct(ol, ol.quantity);
+		actElements();
 	}
 }

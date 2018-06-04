@@ -42,7 +42,7 @@ public abstract class Model_Base {
 	public static ResultSet insert(String table_name, Object[] values, String[] columns,
 			char[] value_types) {
 		DB_Connection.connect();
-		PreparedStatement pstm;
+		PreparedStatement pstm = null;
 		ResultSet rs;
 		
 		String query = formatInsertQuery(table_name, columns);
@@ -63,6 +63,7 @@ public abstract class Model_Base {
 			e.printStackTrace();
 			System.err.println(e.getErrorCode() 
 					+ " - " + e.getLocalizedMessage());
+			System.out.println(table_name);System.out.println(pstm);
 		}
 		
 		return null;

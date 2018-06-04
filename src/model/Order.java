@@ -73,6 +73,7 @@ public class Order extends Model_Base {
 		this.date = new Fecha();
 		this.total_amount = BigDecimal.valueOf(0);
 		this.discount = 0;
+		this.pay_method = Pay_Method.CASH;
 
 		this.lines = new LinkedList<>();
 		isLocal = num_table != null;
@@ -122,7 +123,16 @@ public class Order extends Model_Base {
 				comment
 		};
 		
-		Model_Base.insert(table_name, values, columns, value_types);
+		ResultSet rs = Model_Base.insert(table_name, values, columns, value_types);
+		
+		try {
+			if (rs != null) {
+				this.order_id = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		}
 		
 		for (Order_Line ol : lines) {
 			ol.insert();

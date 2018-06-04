@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 
 import model.Order;
@@ -206,14 +207,18 @@ public class Order_Tables {
 		view.localTable.modelo.setRowCount(0);
 		view.awayTable.modelo.setRowCount(0);
 		for (Order o : localOrders) {
-			view.localTable.modelo.addRow(
-					new Object[] {Integer.toString(o.num_table), o.date.stringReloj(), o.total_amount});
+			view.localTable.modelo.addRow(orderData(o, true));
 		}
 		
 		for (Order o : awayOrders) {
-			view.awayTable.modelo.addRow(
-					new Object[] {o.client.phone_number, o.date.stringReloj(), o.total_amount});
+			view.awayTable.modelo.addRow(orderData(o, false));
 		}
+	}
+	
+	private Object[] orderData(Order o, boolean isLocal) {
+		return new Object[] {isLocal?Integer.toString(o.num_table):o.client.phone_number,
+			o.date.stringReloj(),
+			o.total_amount.multiply(BigDecimal.valueOf(o.discount))};
 	}
 
 }

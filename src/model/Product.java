@@ -16,24 +16,26 @@ public class Product extends Model_Base {
 			"code",
 			"product_name",
 			"price_local",
-			"price_away"
+			"price_away",
+			"isActive"
 			};
 	private static char[] value_types = new char[] {
 			'i',
-			's',
+			'i',
 			's',
 			'b',
-			'b'
+			'b',
+			'i'
 			};
 	
 	public Integer product_id;
 	public Category category;
-	public String code;
+	public Integer code;
 	public String product_name;
 	public BigDecimal price_local;
 	public BigDecimal price_away;
 	
-	private Product(Integer product_id, Category category, String code, String product_name, BigDecimal price_local,
+	private Product(Integer product_id, Category category, Integer code, String product_name, BigDecimal price_local,
 			BigDecimal price_away) {
 		this.product_id = product_id;
 		this.category = category;
@@ -51,7 +53,7 @@ public class Product extends Model_Base {
 			if (rs != null) {
 				p = new Product(id,
 						getCategory((Integer) rs.getObject("category_id")),
-						rs.getString("code"),
+						rs.getInt("code"),
 						rs.getString("product_name"),
 						rs.getBigDecimal("price_local"),
 						rs.getBigDecimal("price_away"));
@@ -102,7 +104,7 @@ public class Product extends Model_Base {
 		try {
 			pstm = DB_Connection.con.prepareStatement(query);
 			pstm.setInt(1, this.product_id);
-			pstm.setString(2, this.code);
+			pstm.setInt(2, this.code);
 			
 			pstm.executeQuery();
 		} catch (SQLException e) {
@@ -115,7 +117,7 @@ public class Product extends Model_Base {
 		LinkedList<Product> products = new LinkedList<Product>();
 		ResultSet rs = Model_Base.find(table_name, false, 
 				new String[] {"product_name", "isActive"}, 
-				new String[] {"LIKE", "="},
+				new String[] {" LIKE ", " = "},
 				new Object[] {"%"+value+"%", 1},
 				new char[] {'s', 'i'});
 		
@@ -125,7 +127,7 @@ public class Product extends Model_Base {
 					products.add(new Product(
 							rs.getInt("product_id"),
 							getCategory((Integer) rs.getObject("category_id")),
-							rs.getString("code"),
+							rs.getInt("code"),
 							rs.getString("product_name"),
 							rs.getBigDecimal("price_local"),
 							rs.getBigDecimal("price_away")));
@@ -139,20 +141,20 @@ public class Product extends Model_Base {
 		return products;
 	}
 	
-	public static Product findByCode(String value) {
+	public static Product findByCode(int value) {
 		Product p = null;
 		ResultSet rs = Model_Base.find(table_name, false, 
 				new String[] {"code", "isActive"}, 
-				new String[] {"LIKE", "="},
+				new String[] {" = ", " = "},
 				new Object[] {value, 1},
-				new char[] {'s', 'i'});
+				new char[] {'i', 'i'});
 		
 		if (rs != null) {
 			try {
 				p = new Product(
 						rs.getInt("product_id"),
 						getCategory((Integer) rs.getObject("category_id")),
-						rs.getString("code"),
+						rs.getInt("code"),
 						rs.getString("product_name"),
 						rs.getBigDecimal("price_local"),
 						rs.getBigDecimal("price_away"));
@@ -179,7 +181,7 @@ public class Product extends Model_Base {
 					products.add(new Product(
 							rs.getInt("product_id"),
 							getCategory((Integer) rs.getObject("category_id")),
-							rs.getString("code"),
+							rs.getInt("code"),
 							rs.getString("product_name"),
 							rs.getBigDecimal("price_local"),
 							rs.getBigDecimal("price_away")));

@@ -88,7 +88,7 @@ public class Client extends Model_Base {
 		Fecha f = new Fecha();
 		ResultSet rs = Model_Base.find(table_name, false,
 				new String[] {"phone_number"},
-				new String[] {"LIKE"},
+				new String[] {" LIKE "},
 				new Object[] {value},
 				new char[] {'s'});
 		
