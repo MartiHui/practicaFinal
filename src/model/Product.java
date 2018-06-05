@@ -45,6 +45,10 @@ public class Product extends Model_Base {
 		this.price_away = price_away;
 	}
 	
+	public Product() {
+		
+	}
+	
 	public static Product load(Integer id) {
 		ResultSet rs = Model_Base.load(table_name, "product_id", id);
 		Product p = null;
@@ -88,7 +92,8 @@ public class Product extends Model_Base {
 				code,
 				product_name,
 				price_local,
-				price_away
+				price_away,
+				1
 			};
 		
 		super.update(table_name, values, columns, value_types, "product_id", product_id);

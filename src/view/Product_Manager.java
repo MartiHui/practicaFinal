@@ -30,6 +30,7 @@ public class Product_Manager extends Panel_Base{
 				null,
 				null,
 				null);
+		productTable.tabla.getTableHeader().setEnabled(false);;
 		productPane.setViewportView(productTable.tabla);
 	}
 }

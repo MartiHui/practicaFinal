@@ -3,10 +3,13 @@ package controller;
 import java.awt.BorderLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import base_classes.Panel_Base;
 import view.Order_Manager;
 
 public class Main_Window {
@@ -24,6 +27,7 @@ public class Main_Window {
 		
 		view.getContentPane().add(BorderLayout.CENTER, ot_controller.view);
 		keyBoardController();
+		menu();
 		
 		currentPanel = 1;
 		
@@ -64,6 +68,27 @@ public class Main_Window {
 		});
 	}
 	
+	private void menu() {
+		view.mntmProductos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openProductManager();
+			}
+		});
+	}
+	
+	private void openProductManager() {
+		swapPanels(-1, (new Product_Manager(this).view));
+	}
+	
+	public void swapPanels(int newPanel, Panel_Base p) {
+		view.getContentPane().removeAll();
+		view.getContentPane().add(BorderLayout.CENTER, p);
+		currentPanel = newPanel;
+		view.repaint();
+		view.revalidate();
+	}
+
 	public static void main(String[] args) {
 		new Main_Window();
 	}
