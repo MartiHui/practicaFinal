@@ -28,8 +28,10 @@ public class Panel_Base extends JPanel {
 		this.setBounds(centrar(width, height));
 		
 		setLayout(null);
-		createClock();
-		updateDate();
+		
+		clock_v();
+		clock_c();
+		
 		repaint();
 		revalidate();
 	}
@@ -46,7 +48,7 @@ public class Panel_Base extends JPanel {
 		return r;
 	}
 	
-	private void createClock() {
+	private void clock_v() {
 		int width = 340;
 		int height = 30;
 		int initialX = 1050;
@@ -65,7 +67,7 @@ public class Panel_Base extends JPanel {
 		add(datetime);
 	}
 	
-	private void updateDate() {
+	private void clock_c() {
 		int interval = 1000;
 		new Timer(interval, new ActionListener() {
 			@Override

@@ -45,9 +45,7 @@ public class Product extends Model_Base {
 		this.price_away = price_away;
 	}
 	
-	public Product() {
-		
-	}
+	public Product() {}
 	
 	public static Product load(Integer id) {
 		ResultSet rs = Model_Base.load(table_name, "product_id", id);
@@ -77,6 +75,32 @@ public class Product extends Model_Base {
 		try {
 			if (rs != null) {
 				p = load(rs.getInt(1));
+				p.substituteProduct();
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		}
+		
+		return p;
+	}
+	
+	public Product insert() {
+		Object[] values = new Object[] {
+				this.category.category_id,
+				this.code,
+				this.product_name,
+				this.price_local,
+				this.price_away,
+				1
+		};
+		ResultSet rs = Model_Base.insert(table_name, values, columns, value_types);
+		Product p = null;
+		
+		try {
+			if (rs != null) {
+				p = load(rs.getInt(1));
+				p.substituteProduct();
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getErrorCode() 

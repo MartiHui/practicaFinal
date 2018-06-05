@@ -11,7 +11,7 @@ import utils.Fecha;
 public class Order extends Model_Base {
 	private static String table_name = "orders";
 	private static String[] columns = new String[] {
-			"pay_method",
+			"paidWithCash",
 			"client_id",
 			"address_id",
 			"num_table",
@@ -21,7 +21,7 @@ public class Order extends Model_Base {
 			"comment"
 			};
 	private static char[] value_types = new char[] {
-			's',
+			'i',
 			'i',
 			'i',
 			'i',
@@ -32,7 +32,7 @@ public class Order extends Model_Base {
 			};
 	
 	public int order_id;
-	public Pay_Method pay_method;
+	public int paidWithCash;
 	public Client client;
 	public Address address;
 	public Integer num_table;
@@ -46,11 +46,11 @@ public class Order extends Model_Base {
 	public boolean ticketOut;
 	
 	// Constructor para la base de datos
-	private Order(int order_id, Pay_Method pay_method, Client client, Address address,
+	private Order(int order_id, int paidWithCash, Client client, Address address,
 			Integer num_table, Fecha date, BigDecimal total_amount, int discount,
 			String comment) {
 		this.order_id = order_id;
-		this.pay_method = pay_method;
+		this.paidWithCash = paidWithCash;
 		this.client = client;
 		this.address = address;
 		this.num_table = num_table;
@@ -73,7 +73,7 @@ public class Order extends Model_Base {
 		this.date = new Fecha();
 		this.total_amount = BigDecimal.valueOf(0);
 		this.discount = 0;
-		this.pay_method = Pay_Method.CASH;
+		this.paidWithCash = 1;
 
 		this.lines = new LinkedList<>();
 		isLocal = num_table != null;
@@ -90,7 +90,7 @@ public class Order extends Model_Base {
 				f.setTime(rs.getDate("date"));
 				
 				o = new Order(id,
-						getPayMethod((String) rs.getObject("pay_method")),
+						rs.getInt("paidWithCash"),
 						getClient((Integer) rs.getObject("client_id")),
 						getAddress((Integer) rs.getObject("address_id")),
 						(Integer) rs.getObject("num_table"),
@@ -113,7 +113,7 @@ public class Order extends Model_Base {
 	 */
 	public void insert() {
 		Object[] values = new Object[] {
-				setPayMethod(this.pay_method),
+				paidWithCash,
 				(client==null)?null:client.client_id, // Para evitar NullPointerException
 				(address==null)?null:address.address_details,
 				num_table,
@@ -139,31 +139,31 @@ public class Order extends Model_Base {
 		}
 	}
 	
-	public void addProduct(Order_Line product, int quantity) {
-		if (lines.contains(product)) {
-			lines.get(lines.indexOf(product)).quantity += quantity;
-		} else {
-			boolean found = false;
-			for (Order_Line ol : this.lines) {
-				if (Order_Line.isSame(product, ol)) {
-					found = true;
-					ol.quantity += quantity;
-					break;
-				}
-			}
-			if (!found) {
-				lines.add(product);
-				product.quantity = quantity;
+	public void addProduct(Order_Line product) {
+		boolean found = false;
+		for (Order_Line ol : this.lines) {
+			if (Order_Line.isSame(product, ol)) {
+				found = true;
+				ol.quantity += product.quantity;
+				break;
 			}
 		}
+		if (!found) {
+			lines.add(product);
+		}
 
-		total_amount = total_amount.add(product.price.multiply(BigDecimal.valueOf(quantity)));
+		total_amount = total_amount.add(product.price.multiply(BigDecimal.valueOf(product.quantity)));
+	}
+	
+	public void addProductThroughTable(Order_Line product) {
+		product.quantity++;
+		this.total_amount.add(product.price);
 	}
 	
 	public void removeProduct(Order_Line product, int quantity) {
 		int i = lines.indexOf(product);
 		Order_Line ol = lines.get(i);
-		quantity = ol.quantity<quantity?ol.quantity:quantity;
+		quantity = ol.quantity<quantity?ol.quantity:quantity; // No podemos quitar más de lo que hay
 		ol.quantity -= quantity;
 		if (ol.quantity < 1) {
 			lines.remove(ol);
@@ -174,44 +174,6 @@ public class Order extends Model_Base {
 	
 	public void getOrderLines() {
 		lines = Order_Line.find(order_id);
-	}
-	
-	public static Pay_Method getPayMethod(String method) {
-		switch (method) {
-		case "cash":
-			return Pay_Method.CASH;
-			
-		case "credit_card":
-			return Pay_Method.CREDIT_CARD;
-			
-		case "criptocurrency":
-			return Pay_Method.CRIPTOCURRENCY;
-			
-		case "paypal":
-			return Pay_Method.PAYPAL;
-
-		default:
-			return null;
-		}
-	}
-	
-	public static String setPayMethod(Pay_Method p) {
-		switch (p) {
-		case CASH:
-			return "cash";
-			
-		case CREDIT_CARD:
-			return "credit_card";
-			
-		case CRIPTOCURRENCY:
-			return "criptocurrency";
-			
-		case PAYPAL:
-			return "paypal";
-
-		default:
-			return null;
-		}
 	}
 	
 	public static Client getClient(Integer id) {

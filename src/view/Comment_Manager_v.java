@@ -10,7 +10,7 @@ import base_classes.Panel_Base;
 
 import javax.swing.JButton;
 
-public class Order_Comment extends JDialog{
+public class Comment_Manager_v extends JDialog{
 	/**
 	 * 
 	 */
@@ -20,14 +20,14 @@ public class Order_Comment extends JDialog{
 	public JButton cancel;
 	public JButton save;
 	
-	public Order_Comment(String s) {
+	public Comment_Manager_v(String s) {
 		this.s = s;
 		
 		properties();
 		getContentPane().setLayout(null);
 		
-		createButtons();
-		createTextElements();
+		buttons();
+		textElements();
 		
 		repaint();
 		revalidate();
@@ -39,7 +39,7 @@ public class Order_Comment extends JDialog{
 		this.setBounds(Panel_Base.centrar(500, 400));
 	}
 	
-	private void createButtons() {
+	private void buttons() {
 		cancel = new JButton("CANCELAR");
 		cancel.setBounds(267, 211, 89, 23);
 		getContentPane().add(cancel);
@@ -49,7 +49,7 @@ public class Order_Comment extends JDialog{
 		getContentPane().add(save);
 	}
 	
-	private void createTextElements() {
+	private void textElements() {
 		JLabel commentLabel = new JLabel("Comentario:");
 		commentLabel.setBounds(10, 11, 77, 33);
 		getContentPane().add(commentLabel);

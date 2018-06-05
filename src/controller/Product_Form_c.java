@@ -7,18 +7,20 @@ import java.util.LinkedList;
 
 import model.Category;
 import model.Product;
+import view.Product_Form_v;
 
-public class Product_Form {
-	public view.Product_Form view;
-	public Product_Manager pm;
+public class Product_Form_c {
+	public Product_Form_v view;
+	public Products_Viewer_c pm;
 	public Product p;
 	public int code;
 	
-	public Product_Form(Product_Manager pm, Product p, int code) {
-		this.view = new view.Product_Form(p);
+	public Product_Form_c(Products_Viewer_c pm, Product p, int code) {
 		this.pm = pm;
 		this.p = p;
 		this.code = code;
+		
+		this.view = new Product_Form_v(p);
 		
 		fillData();
 		buttons();
@@ -63,10 +65,16 @@ public class Product_Form {
 	}
 	
 	private void modifyProduct() {
-		boolean insert = p==null;
+		boolean insert;
+		if (p==null || !p.product_name.equals(view.nameText)) {
+			insert = true;
+		} else {
+			insert = false;
+		}
 		if (insert) {
 			p = new Product();
 		}
+		
 		p.code = code;
 		p.product_name = view.nameText.getText();
 		p.category = ((Category) view.categoryBox.getSelectedItem());
@@ -79,9 +87,7 @@ public class Product_Form {
 		} catch (NumberFormatException e) {}
 		
 		if (insert)	{
-			Product.insert(new Object[] {p.category.category_id,
-					p.code, p.product_name, p.price_local, p.price_away, 1
-			});
+			p.insert();
 		} else {
 			p.update();
 		}
@@ -92,5 +98,4 @@ public class Product_Form {
 		view.setVisible(false);
 		view.dispose();
 	}
-
 }

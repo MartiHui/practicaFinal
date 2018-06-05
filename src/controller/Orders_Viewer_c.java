@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -9,107 +8,111 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 
 import model.Order;
+import view.Orders_Viewer_v;
 
-public class Order_Tables {
-	public Main_Window main;
-	public view.Order_Tables view;
+public class Orders_Viewer_c {
+	public Main_Window_c main;
+	
+	public Orders_Viewer_v view;
+	
 	public LinkedList<Order> localOrders;
 	public LinkedList<Order> awayOrders;
 	
-	public Order_Tables(Main_Window main) {
+	public Orders_Viewer_c(Main_Window_c main) {
 		this.main = main;
-		view = new view.Order_Tables();
+		view = new view.Orders_Viewer_v();
+		
 		localOrders = new LinkedList<>();
 		awayOrders = new LinkedList<>();
 		
-		consoleControllerKeyPad();
+		keypad();
 		fillTables();
-		tableListeners();
+		tables();
 	}
 	
-	private void consoleControllerKeyPad() {
+	private void keypad() {
 		view.keypad_c.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(8);
+				console(8);
 			}
 		});
 		
 		view.keypad_enter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(10);
+				console(10);
 			}
 		});
 		
 		view.keypad_0.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(48);
+				console(48);
 			}
 		});
 		
 		view.keypad_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(49);
+				console(49);
 			}
 		});
 		
 		view.keypad_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(50);
+				console(50);
 			}
 		});
 		
 		view.keypad_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(51);
+				console(51);
 			}
 		});
 		
 		view.keypad_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(52);
+				console(52);
 			}
 		});
 		
 		view.keypad_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(53);
+				console(53);
 			}
 		});
 		
 		view.keypad_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(54);
+				console(54);
 			}
 		});
 		
 		view.keypad_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(55);
+				console(55);
 			}
 		});
 		
 		view.keypad_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(56);
+				console(56);
 			}
 		});
 		
 		view.keypad_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				consoleEvent(57);
+				console(57);
 			}
 		});
 	}
 	
-	public void consoleEvent(int ascii) {
+	public void console(int ascii) {
 		String consoleContent = view.console.getText();
 		
 		if (consoleContent.length() < 9) { // Mientras haya menos de 9 caracteres
 			if (49 <= ascii && ascii <= 57) { // Si es un numero entre 1 y 9, inclusive, lo añadimos sin problemas
-				addText(ascii);
+				addNumber(ascii);
 			} else if (ascii == 48) {
 				if (consoleContent.length() > 0) {
-					addText(ascii);
+					addNumber(ascii);
 				}
 			}
 		}
@@ -126,7 +129,7 @@ public class Order_Tables {
 		}
 	}
 	
-	private void addText(int ascii) {
+	private void addNumber(int ascii) {
 		view.console.setText(view.console.getText() + Character.toString((char) ascii));
 	}
 	
@@ -155,15 +158,11 @@ public class Order_Tables {
 	}
 	
 	private void executeManageOrder(Order order) {
-		main.om_controller = new Order_Manager(order, main);
-		main.view.remove(main.ot_controller.view);
-		main.view.getContentPane().add(BorderLayout.CENTER, main.om_controller.view);
-		main.view.repaint();
-		main.view.revalidate();
-		main.currentPanel = 2;
+		main.orderManager = new Order_Manager_c(order, main);
+		main.swapPanels(2, main.orderManager.view);
 	}
 	
-	private void tableListeners() {
+	private void tables() {
 		view.localTable.tabla.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -207,15 +206,15 @@ public class Order_Tables {
 		view.localTable.modelo.setRowCount(0);
 		view.awayTable.modelo.setRowCount(0);
 		for (Order o : localOrders) {
-			view.localTable.modelo.addRow(orderData(o, true));
+			view.localTable.modelo.addRow(orderToTablerow(o, true));
 		}
 		
 		for (Order o : awayOrders) {
-			view.awayTable.modelo.addRow(orderData(o, false));
+			view.awayTable.modelo.addRow(orderToTablerow(o, false));
 		}
 	}
 	
-	private Object[] orderData(Order o, boolean isLocal) {
+	private Object[] orderToTablerow(Order o, boolean isLocal) {
 		return new Object[] {isLocal?Integer.toString(o.num_table):o.client.phone_number,
 			o.date.stringReloj(),
 			o.total_amount.multiply(BigDecimal.valueOf(o.discount))};

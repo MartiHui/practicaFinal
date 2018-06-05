@@ -11,18 +11,26 @@ import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 
-public class Product_Form extends JDialog {
+public class Product_Form_v extends JDialog {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5506628312113431692L;
+
 	public Product p;
+	
 	public JTextField nameText;
 	public JTextField localText;
 	public JTextField awayText;
 	public JLabel codeText;
 	public JComboBox<Category> categoryBox;
+	
 	public JButton cancel;
 	public JButton save;
 	
-	public Product_Form(Product p) {
+	public Product_Form_v(Product p) {
 		this.p = p;
+		
 		getContentPane().setLayout(null);
 		properties();
 		

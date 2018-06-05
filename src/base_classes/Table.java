@@ -23,9 +23,6 @@ public class Table {
 	private DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 	private DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 	
-	
-	
-	
 	public Table(Object[] cabecera, Class<?>[] tipos, Integer[] medidas, Color par, Color impar, Color sel) {
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
 		leftRenderer.setHorizontalAlignment( SwingConstants.LEFT );

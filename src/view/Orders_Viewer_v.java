@@ -12,16 +12,19 @@ import base_classes.KeyPad;
 import base_classes.Panel_Base;
 import base_classes.Table;
 
-public class Order_Tables extends Panel_Base {
+public class Orders_Viewer_v extends Panel_Base {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4185438257464370072L;
+	
 	public JScrollPane localPane;
 	public Table localTable;
-	public Table awayTable;
 	public JScrollPane awayPane;
+	public Table awayTable;
+	
 	public JTextField console;
+	
 	public KeyPad keypad_c;
 	public KeyPad keypad_0;
 	public KeyPad keypad_1;
@@ -35,18 +38,16 @@ public class Order_Tables extends Panel_Base {
 	public KeyPad keypad_9;
 	public KeyPad keypad_enter;
 	
-	public Order_Tables() {
+	public Orders_Viewer_v() {
 		super();
-		createElements();
+		tables();
+		console();
+		keypad();
+		repaint();
+		revalidate();
 	}
 	
-	private void createElements() {
-		createOrderTables();
-		createConsole();
-		createKeypad();
-	}
-	
-	private void createOrderTables() {
+	private void tables() {
 		int width = 475;
 		int height = 775;
 		int initialX = 0;
@@ -102,7 +103,7 @@ public class Order_Tables extends Panel_Base {
 		add(awayTableLabel);
 	}
 	
-	private void createConsole() {
+	private void console() {
 		console = new JTextField();
 		console.setEditable(false);
 		console.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -110,7 +111,7 @@ public class Order_Tables extends Panel_Base {
 		add(console);
 	}
 	
-	private void createKeypad() {
+	private void keypad() {
 		int initialX = 1100;
 		int initialY = 600;
 		int jumpX = 100;

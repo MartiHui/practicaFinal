@@ -16,21 +16,21 @@ import model.Order_Line;
 import model.Product;
 import view.Product_Comment;
 
-public class Order_Manager {
-	public Main_Window main;
-	public view.Order_Manager view;
+public class Order_Manager_c {
+	public Main_Window_c main;
+	public view.Order_Manager_v view;
 	public Order order;
 	public String product_comment;
 	public BigDecimal product_price;
 	public boolean modifiedPrice;
 	
-	public Order_Manager(Order order, Main_Window main) {
+	public Order_Manager_c(Order order, Main_Window_c main) {
 		this.main = main;
 		this.order = order;
 		this.product_comment = "";
 		this.product_price = BigDecimal.valueOf(0);
 		modifiedPrice = false;
-		view = new view.Order_Manager(order.isLocal);
+		view = new view.Order_Manager_v(order.isLocal);
 		fillData();
 		console();
 		createCommentListeners();
@@ -82,7 +82,7 @@ public class Order_Manager {
 	
 	private void commentWindow() {
 		main.currentPanel = -1;
-		new Order_Comment(this, this.order.comment, main);
+		new Comment_Manager_c(this, this.order.comment, main);
 	}
 	
 	private void console() {
@@ -113,7 +113,7 @@ public class Order_Manager {
 			break;
 			
 		case 6: // + cantidad
-			order.addProduct(order.lines.get(row), 1);
+			order.addProductThroughTable(order.lines.get(row));
 			actElements();
 			break;
 			
@@ -234,7 +234,7 @@ public class Order_Manager {
 		this.product_comment = "";
 		view.resetQuantity();
 		
-		this.order.addProduct(ol, ol.quantity);
+		this.order.addProduct(ol);
 		actElements();
 	}
 	
@@ -284,9 +284,9 @@ public class Order_Manager {
 	}
 	
 	private void exit() {
-		main.view.remove(main.om_controller.view);
-		main.view.getContentPane().add(BorderLayout.CENTER, main.ot_controller.view);
-		main.ot_controller.fillTables();
+		main.view.remove(main.orderManager.view);
+		main.view.getContentPane().add(BorderLayout.CENTER, main.ordersViewer.view);
+		main.ordersViewer.fillTables();
 		main.view.repaint();
 		main.view.revalidate();
 		main.currentPanel = 1;
@@ -294,9 +294,9 @@ public class Order_Manager {
 	
 	private void destroy() {
 		if (order.isLocal) {
-			main.ot_controller.localOrders.remove(order);
+			main.ordersViewer.localOrders.remove(order);
 		} else {
-			main.ot_controller.localOrders.remove(order);
+			main.ordersViewer.localOrders.remove(order);
 		}
 	}
 	
@@ -362,7 +362,7 @@ public class Order_Manager {
 		this.product_comment = "";
 		view.resetQuantity();
 		
-		this.order.addProduct(ol, ol.quantity);
+		this.order.addProduct(ol);
 		actElements();
 	}
 }

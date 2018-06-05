@@ -2,19 +2,20 @@ package controller;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 
 import model.Product;
+import view.Products_Viewer_v;
 
-public class Product_Manager {
-	public Main_Window main;
-	public view.Product_Manager view;
+public class Products_Viewer_c {
+	public Main_Window_c main;
+	public Products_Viewer_v view;
 	
-	public Product_Manager(Main_Window main) {
-		this.view = new view.Product_Manager();
+	public Products_Viewer_c(Main_Window_c main) {
+		this.view = new Products_Viewer_v();
 		this.main = main;
+		
 		fillTable();
-		tableListener();
+		table();
 	}
 	
 	public void fillTable() {
@@ -36,7 +37,7 @@ public class Product_Manager {
 		}
 	}
 	
-	private void tableListener() {
+	private void table() {
 		view.productTable.tabla.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -48,6 +49,6 @@ public class Product_Manager {
 	}
 	
 	private void openProductForm(int code) {
-		new Product_Form(this, Product.findByCode(code), code);
+		new Product_Form_c(this, Product.findByCode(code), code);
 	}
 }

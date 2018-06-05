@@ -6,6 +6,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import base_classes.Panel_Base;
+import controller.Main_Window_c;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,14 +18,17 @@ public class Product_Comment extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = -4686822957233913974L;
-	private controller.Main_Window main;
+	private Main_Window_c main;
 
-	public Product_Comment(String s, controller.Main_Window main) {
+	public Product_Comment(String s, Main_Window_c main) {
 		this.main = main;
+		
 		properties();
 		getContentPane().setLayout(null);
-		createTextElements(s);
-		createButton();
+		
+		textElements(s);
+		button();
+		
 		setModal(true);
 		setVisible(true);
 	}
@@ -35,7 +39,7 @@ public class Product_Comment extends JDialog {
 		this.setBounds(Panel_Base.centrar(500, 400));
 	}
 	
-	private void createTextElements(String s) {
+	private void textElements(String s) {
 		JLabel commentLabel = new JLabel("Comentario:");
 		commentLabel.setBounds(10, 11, 77, 33);
 		getContentPane().add(commentLabel);
@@ -52,7 +56,7 @@ public class Product_Comment extends JDialog {
 		getContentPane().add(commentScrollPane);
 	}
 	
-	private void createButton() {
+	private void button() {
 		JButton okButton = new JButton("OK");
 		okButton.setBounds(117, 208, 89, 23);
 		getContentPane().add(okButton);

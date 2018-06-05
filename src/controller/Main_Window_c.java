@@ -10,22 +10,23 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import base_classes.Panel_Base;
-import view.Order_Manager;
+import view.Main_Window_v;
 
-public class Main_Window {
-	public view.Main_Window view;
+public class Main_Window_c {
+	public Main_Window_v view;
 	
-	public Order_Tables ot_controller;
-	public controller.Order_Manager om_controller;
+	public Orders_Viewer_c ordersViewer;
+	public Order_Manager_c orderManager;
 	
 	public KeyEventDispatcher keyEventDispatcher;
 	public int currentPanel;
 	
-	public Main_Window() {
-		view = new view.Main_Window();
-		ot_controller = new Order_Tables(this);
+	public Main_Window_c() {
+		view = new view.Main_Window_v();
+		ordersViewer = new Orders_Viewer_c(this);
 		
-		view.getContentPane().add(BorderLayout.CENTER, ot_controller.view);
+		view.getContentPane().add(BorderLayout.CENTER, ordersViewer.view);
+		
 		keyBoardController();
 		menu();
 		
@@ -42,14 +43,14 @@ public class Main_Window {
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
 					if (currentPanel == 1) {
 						//mw.console.setText(Integer.toString(e.getKeyChar()));
-						ot_controller.consoleEvent(e.getKeyChar());
+						ordersViewer.console(e.getKeyChar());
 					} else if (currentPanel == 2) {
 						if (e.getKeyCode() == KeyEvent.VK_F1) {
-							om_controller.newComment();
+							orderManager.newComment();
 						} else if (e.getKeyCode() == KeyEvent.VK_F2) {
-							om_controller.newPrice();
+							orderManager.newPrice();
 						} else {
-							om_controller.consoleEvent(e.getKeyChar());
+							orderManager.consoleEvent(e.getKeyChar());
 						}
 					}
 				}
@@ -75,10 +76,21 @@ public class Main_Window {
 				openProductManager();
 			}
 		});
+		
+		view.mntmCategorias.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openCategoryManager();
+			}
+		});
 	}
 	
 	private void openProductManager() {
-		swapPanels(-1, (new Product_Manager(this).view));
+		swapPanels(-1, (new Products_Viewer_c(this).view));
+	}
+	
+	private void openCategoryManager() {
+		// TODO
 	}
 	
 	public void swapPanels(int newPanel, Panel_Base p) {
@@ -90,6 +102,6 @@ public class Main_Window {
 	}
 
 	public static void main(String[] args) {
-		new Main_Window();
+		new Main_Window_c();
 	}
 }

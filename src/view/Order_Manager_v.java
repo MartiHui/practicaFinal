@@ -1,9 +1,6 @@
 package view;
 import javax.swing.JScrollPane;
 
-import java.math.BigDecimal;
-import java.util.Locale.Category;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -15,7 +12,6 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.TableRowSorter;
 
 import base_classes.Panel_Base;
 import base_classes.Table;
@@ -24,12 +20,8 @@ import model.Product;
 
 import java.awt.Insets;
 import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-public class Order_Manager extends Panel_Base {
+public class Order_Manager_v extends Panel_Base {
 	/**
 	 * 
 	 */
@@ -65,7 +57,7 @@ public class Order_Manager extends Panel_Base {
 	public JButton addComment;
 	public JButton addPrice;
 	
-	public Order_Manager(boolean isLocal) {
+	public Order_Manager_v(boolean isLocal) {
 		super();
 		setLayout(null);
 		createCommentSection();

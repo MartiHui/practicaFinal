@@ -1,49 +1,40 @@
 package view;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import base_classes.Panel_Base;
+
 import javax.swing.JMenu;
 
-public class Main_Window extends JFrame {
+public class Main_Window_v extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7125048035869540441L;
 	public JMenuBar menuBar;
 	public JMenu manageMenu;
-	public JMenuItem mntmCategoras;
+	public JMenuItem mntmCategorias;
 	public JMenuItem mntmProductos;
 
-	public Main_Window() {
+	public Main_Window_v() {
 		menu();
 		setProperties();
 	}
 	
 	private void setProperties() {
+		int width = 1440;
+		int height = 900;
+		
 		this.setTitle("TERMINAL PUNTO DE VENTA");
 		this.setResizable(false);
-		setSize();
+		this.setBounds(Panel_Base.centrar(width, height));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		this.setVisible(true);
-	}
-	
-	private void setSize() {
-		int width = 1440;
-		int height = 900;
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Dimension monitor = tk.getScreenSize();
-		Dimension ventana = new Dimension(width, height);
-		
-		this.setBounds((monitor.width-ventana.width)/2,
-				(monitor.height-ventana.height)/2,
-				ventana.width, ventana.height);
 	}
 	
 	private void menu() {
@@ -53,8 +44,8 @@ public class Main_Window extends JFrame {
 		manageMenu = new JMenu("Administrar");
 		menuBar.add(manageMenu);
 		
-		mntmCategoras = new JMenuItem("Categorías");
-		manageMenu.add(mntmCategoras);
+		mntmCategorias = new JMenuItem("Categorías");
+		manageMenu.add(mntmCategorias);
 		
 		mntmProductos = new JMenuItem("Productos");
 		manageMenu.add(mntmProductos);
