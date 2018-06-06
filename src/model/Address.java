@@ -125,6 +125,7 @@ public class Address extends Model_Base {
 	
 	public void update() {
 		Object[] values = new Object[] {
+				client.client_id,
 				address_name,
 				zone,
 				comment};
@@ -133,7 +134,15 @@ public class Address extends Model_Base {
 	}
 	
 	public void delete() {
-		super.delete(table_name, "address_id", this.address_id);
+		try {
+			super.delete(table_name, "address_id", this.address_id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String toString() {

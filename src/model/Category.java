@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import base_classes.Model_Base;
 
 public class Category extends Model_Base {
@@ -78,6 +80,30 @@ public class Category extends Model_Base {
 		return categories;
 	}
 	
+	public static LinkedList<Category> findByName(String value) {
+		LinkedList<Category> categories = new LinkedList<Category>();
+		ResultSet rs = Model_Base.find(table_name, false, 
+				new String[] {"category_name"}, 
+				new String[] {" LIKE "},
+				new Object[] {"%"+value+"%"},
+				new char[] {'s'});
+		
+		if (rs != null) {
+			try {
+				do {
+					categories.add(new Category(
+							rs.getInt("category_id"),
+							rs.getString("category_name")));
+				} while (rs.next());
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return categories;
+	}
+	
 	public void update() {
 		Object[] values = new Object[] {
 				this.category_name};
@@ -86,7 +112,16 @@ public class Category extends Model_Base {
 	}
 	
 	public void delete() {
-		super.delete(table_name, "category_id", this.category_id);
+		try {
+			super.delete(table_name, "category_id", this.category_id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+			JOptionPane.showMessageDialog(null, "Esta categoría no se puede borrar.", "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String toString() {

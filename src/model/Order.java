@@ -150,17 +150,13 @@ public class Order extends Model_Base {
 		
 		try {
 			if (rs != null) {
-				f.setTime(rs.getDate("date"));
-				
-				orders.add(new Order(rs.getInt("order_id"),
-						rs.getInt("paidWithCash"),
-						getClient((Integer) rs.getObject("client_id")),
-						getAddress((Integer) rs.getObject("address_id")),
-						(Integer) rs.getObject("num_table"),
-						f,
-						rs.getBigDecimal("total_amount"),
-						rs.getInt("discount"),
-						rs.getString("comment")));
+				do {
+					f.setTime(rs.getDate("date"));
+					orders.add(new Order(rs.getInt("order_id"), rs.getInt("paidWithCash"),
+							getClient((Integer) rs.getObject("client_id")),
+							getAddress((Integer) rs.getObject("address_id")), (Integer) rs.getObject("num_table"), f,
+							rs.getBigDecimal("total_amount"), rs.getInt("discount"), rs.getString("comment")));
+				} while (rs.next());
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getErrorCode() 

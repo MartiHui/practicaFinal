@@ -154,22 +154,16 @@ public abstract class Model_Base {
 		return query;
 	}
 	
-	public void delete(String table_name, String column, Integer value) {
+	public void delete(String table_name, String column, Integer value) throws Exception {
 		DB_Connection.connect();
 		PreparedStatement pstm;
 		
 		String query = "DELETE FROM " + table_name + " WHERE " + column + " = ?";
 		
-		try {
-			pstm = DB_Connection.con.prepareStatement(query);
-			pstm.setInt(1, value);
-			
-			pstm.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println(e.getErrorCode() 
-					+ " - " + e.getLocalizedMessage());
-		}
+		pstm = DB_Connection.con.prepareStatement(query);
+		pstm.setInt(1, value);
+		
+		pstm.executeUpdate();
 	}
 	
 	/*

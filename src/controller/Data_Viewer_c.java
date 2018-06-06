@@ -27,13 +27,13 @@ public class Data_Viewer_c {
 	public Table categoryTable; // 1
 	public Table clientTable; // 2
 	public Table addressTable; // 3
+	private boolean active;
 	
 	public Data_Viewer_c(Main_Window_c main) {
 		this.view = new Data_Viewer_v();
 		this.main = main;
 		
 		buttons();
-		search();
 		productsTable();
 	}
 	
@@ -70,6 +70,7 @@ public class Data_Viewer_c {
 	public void productsTable() {
 		currentTable = 0;
 		view.searchLabel.setText("Nombre del producto: ");
+		search();
 		
 		productTable = new Table(new String[] {"ID", "Código", "Nombre", "Categoría", "Precio local", "Precio domicilio", "Veces pedido"},
 				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, BigDecimal.class, BigDecimal.class, Integer.class},
@@ -117,6 +118,7 @@ public class Data_Viewer_c {
 	public void categoriesTable() {
 		currentTable = 1;
 		view.searchLabel.setText("Nombre de la categoría: ");
+		search();
 		
 		categoryTable = new Table(new String[] {"ID", "Nombre", "Nº productos"},
 				new Class<?>[] {Integer.class, String.class, Integer.class},
@@ -161,6 +163,7 @@ public class Data_Viewer_c {
 	public void clientTable() {
 		currentTable = 2;
 		view.searchLabel.setText("Número de teléfono: ");
+		search();
 		
 		clientTable = new Table(new String[] {"ID", "Teléfono",  "Último pedido", "Nº pedidos", "Total pedido"},
 				new Class<?>[] {Integer.class, String.class, String.class, Integer.class, BigDecimal.class},
@@ -174,7 +177,7 @@ public class Data_Viewer_c {
 		// Fill table
 		for (Client c : Client.find()) {
 			LinkedList<Order> o = Order.findByClient(c);
-			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order.stringFecha(), o.size(), Order.totalOrders(o)});
+			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order==null?null:c.last_order.stringFecha(), o.size(), Order.totalOrders(o)});
 		}
 		
 		// Table listener
@@ -192,6 +195,7 @@ public class Data_Viewer_c {
 	public void addressTable() {
 		currentTable = 3;
 		view.searchLabel.setText("Nombre de la calle: ");
+		search();
 		
 		addressTable = new Table(new String[] {"ID", "Cliente", "Calle", "Zona"},
 				new Class<?>[] {Integer.class, String.class, String.class, String.class},
@@ -220,21 +224,30 @@ public class Data_Viewer_c {
 	}
 	
 	private void search() {
+		active = false;
+		view.searchText.setText("");
+		active = true;
 		view.searchText.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
-				updateTable();
+				if (active) {
+					updateTable();
+				}
 			}
 			
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
-				updateTable();
+				if (active) {
+					updateTable();
+				}
 			}
 			
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
-				updateTable();
+				if (active) {
+					updateTable();
+				}
 			}
 		});
 	}
@@ -292,11 +305,16 @@ public class Data_Viewer_c {
 	}
 	
 	private void showCategorySearch(String s) {
-		
+		for (Category c : Category.findByName(s)) {
+			categoryTable.modelo.addRow(new Object[] {c.category_id, c.category_name, Product.findByCategory(c.category_id).size()});
+		}
 	}
 	
 	private void showClientSearch(String s) {
-		
+		for (Client c : Client.findBySimilarPhone(s)) {
+			LinkedList<Order> o = Order.findByClient(c);
+			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order==null?null:c.last_order.stringFecha(), o.size(), Order.totalOrders(o)});
+		}
 	}
 	
 	private void showAddressSearch(String s) {

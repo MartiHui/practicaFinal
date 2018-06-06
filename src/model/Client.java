@@ -34,11 +34,11 @@ public class Client extends Model_Base {
 	public static Client load(Integer id) {
 		ResultSet rs = Model_Base.load(table_name, "client_id", id);
 		Client c = null;
-		Fecha f = new Fecha();
+		Fecha f = null;
 
 		try {
 			if (rs != null) {
-				f.setTime(rs.getDate("last_order"));
+				Fecha.setTime(f, rs.getDate("last_order"));
 				
 				c = new Client(id,
 						getAddress(rs.getInt("last_address")),
@@ -80,7 +80,7 @@ public class Client extends Model_Base {
 	
 	public static Client findByPhone(String value) {
 		Client c = null;
-		Fecha f = new Fecha();
+		Fecha f = null;
 		ResultSet rs = Model_Base.find(table_name, false,
 				new String[] {"phone_number"},
 				new String[] {" LIKE "},
@@ -89,7 +89,7 @@ public class Client extends Model_Base {
 		
 		if (rs != null) {
 			try {
-				f.setTime(rs.getDate("last_order"));
+				Fecha.setTime(f, rs.getDate("last_order"));
 				
 				c = new Client(rs.getInt("client_id"),
 						getAddress(rs.getInt("last_address")),
@@ -104,9 +104,35 @@ public class Client extends Model_Base {
 		return c;
 	}
 	
+	public static LinkedList<Client> findBySimilarPhone(String value) {
+		LinkedList<Client> clients = new LinkedList<>();
+		Fecha f;
+		ResultSet rs = Model_Base.find(table_name, false,
+				new String[] {"phone_number"},
+				new String[] {" LIKE "},
+				new Object[] {"%"+value+"%"},
+				new char[] {'s'});
+		
+		if (rs != null) {
+			try {
+				do {
+					f = null;
+					Fecha.setTime(f, rs.getDate("last_order"));
+					clients.add(new Client(rs.getInt("client_id"), getAddress(rs.getInt("last_address")), f,
+							rs.getString("phone_number")));
+				} while (rs.next());
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return clients;
+	}
+	
 	public static LinkedList<Client> find() {
 		LinkedList<Client> clients = new LinkedList<>();
-		Fecha f = new Fecha();
+		Fecha f = null;
 		ResultSet rs = Model_Base.find(table_name, false,
 				new String[] {"1"}, 
 				new String[] {" = "},
@@ -115,12 +141,11 @@ public class Client extends Model_Base {
 		
 		if (rs != null) {
 			try {
-				f.setTime(rs.getDate("last_order"));
-				
-				clients.add(new Client(rs.getInt("client_id"),
-						getAddress(rs.getInt("last_address")),
-						f,
-						rs.getString("phone_number")));
+				do {
+					Fecha.setTime(f, rs.getDate("last_order"));
+					clients.add(new Client(rs.getInt("client_id"), getAddress(rs.getInt("last_address")), f,
+							rs.getString("phone_number")));
+				} while (rs.next());
 			} catch (SQLException e) {
 				System.err.println(e.getErrorCode() 
 						+ " - " + e.getLocalizedMessage());
