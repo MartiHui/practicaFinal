@@ -283,7 +283,7 @@ public class Order_Manager_c {
 		});
 	}
 	
-	private void exit() {
+	public void exit() {
 		main.view.remove(main.orderManager.view);
 		main.view.getContentPane().add(BorderLayout.CENTER, main.ordersViewer.view);
 		main.ordersViewer.fillTables();

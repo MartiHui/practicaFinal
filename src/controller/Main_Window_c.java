@@ -70,27 +70,35 @@ public class Main_Window_c {
 	}
 	
 	private void menu() {
-		view.mntmProductos.addActionListener(new ActionListener() {
+		view.menuData.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				openProductManager();
+				openDataManager();
 			}
 		});
 		
-		view.mntmCategorias.addActionListener(new ActionListener() {
+		view.menuOrders.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				openCategoryManager();
+				openOrdersViewer();
 			}
 		});
 	}
 	
-	private void openProductManager() {
-		swapPanels(-1, (new Products_Viewer_c(this).view));
+	private void saveOrder() {
+		if (currentPanel == 2) {
+			orderManager.exit();
+		}
 	}
 	
-	private void openCategoryManager() {
-		// TODO
+	private void openDataManager() {
+		saveOrder();
+		swapPanels(-1, (new Data_Viewer_c(this).view));
+	}
+	
+	private void openOrdersViewer() {
+		saveOrder();
+		swapPanels(1, this.ordersViewer.view);
 	}
 	
 	public void swapPanels(int newPanel, Panel_Base p) {

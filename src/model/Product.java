@@ -124,6 +124,23 @@ public class Product extends Model_Base {
 		substituteProduct();
 	}
 	
+	public void deactivate() {
+		DB_Connection.connect();
+		PreparedStatement pstm;
+		
+		String query = "UPDATE products SET isActive = 0 WHERE product_id = ?";
+		
+		try {
+			pstm = DB_Connection.con.prepareStatement(query);
+			pstm.setInt(1, this.product_id);
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		}
+	}
+	
 	private void substituteProduct() {
 		DB_Connection.connect();
 		PreparedStatement pstm;

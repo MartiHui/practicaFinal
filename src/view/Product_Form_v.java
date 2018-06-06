@@ -27,6 +27,7 @@ public class Product_Form_v extends JDialog {
 	
 	public JButton cancel;
 	public JButton save;
+	public JButton delete;
 	
 	public Product_Form_v(Product p) {
 		this.p = p;
@@ -54,9 +55,9 @@ public class Product_Form_v extends JDialog {
 		nameLabel.setBounds(30, 70, 46, 14);
 		getContentPane().add(nameLabel);
 		
-		JLabel cateogryLabel = new JLabel("Category:");
-		cateogryLabel.setBounds(30, 111, 57, 14);
-		getContentPane().add(cateogryLabel);
+		JLabel categoryLabel = new JLabel("Category:");
+		categoryLabel.setBounds(30, 111, 57, 14);
+		getContentPane().add(categoryLabel);
 		
 		JLabel localLabel = new JLabel("Precio local:");
 		localLabel.setBounds(30, 152, 80, 14);
@@ -96,11 +97,15 @@ public class Product_Form_v extends JDialog {
 	
 	private void buttons() {
 		cancel = new JButton("Cancelar");
-		cancel.setBounds(185, 263, 89, 23);
+		cancel.setBounds(141, 263, 89, 23);
 		getContentPane().add(cancel);
 		
 		save = new JButton("Guardar");
-		save.setBounds(60, 263, 89, 23);
+		save.setBounds(30, 263, 89, 23);
 		getContentPane().add(save);
+		
+		delete = new JButton("Eliminar");
+		delete.setBounds(253, 263, 89, 23);
+		getContentPane().add(delete);
 	}
 }

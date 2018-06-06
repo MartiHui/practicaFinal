@@ -11,12 +11,12 @@ import view.Product_Form_v;
 
 public class Product_Form_c {
 	public Product_Form_v view;
-	public Products_Viewer_c pm;
+	public Data_Viewer_c dv;
 	public Product p;
 	public int code;
 	
-	public Product_Form_c(Products_Viewer_c pm, Product p, int code) {
-		this.pm = pm;
+	public Product_Form_c(Data_Viewer_c dv, Product p, int code) {
+		this.dv = dv;
 		this.p = p;
 		this.code = code;
 		
@@ -43,6 +43,8 @@ public class Product_Form_c {
 			view.categoryBox.setSelectedIndex(p.category.category_id-1);
 			view.localText.setText(p.price_local.toString());
 			view.awayText.setText(p.price_away.toString());
+		} else {
+			view.delete.setEnabled(false);
 		}
 	}
 	
@@ -51,7 +53,6 @@ public class Product_Form_c {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				modifyProduct();
-				pm.fillTable();
 				exit();
 			}
 		});
@@ -62,11 +63,19 @@ public class Product_Form_c {
 				exit();
 			}
 		});
+		
+		view.delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				p.deactivate();
+				exit();
+			}
+		});
 	}
 	
 	private void modifyProduct() {
 		boolean insert;
-		if (p==null || !p.product_name.equals(view.nameText)) {
+		if (p == null || !p.product_name.equals(view.nameText.getText())) {
 			insert = true;
 		} else {
 			insert = false;
@@ -95,6 +104,7 @@ public class Product_Form_c {
 	}
 	
 	private void exit() {
+		dv.productsTable();
 		view.setVisible(false);
 		view.dispose();
 	}

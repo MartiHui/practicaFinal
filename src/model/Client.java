@@ -2,6 +2,7 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 import base_classes.Model_Base;
 import utils.Fecha;
@@ -77,7 +78,7 @@ public class Client extends Model_Base {
 		super.update(table_name, values, columns, value_types, "client_id", client_id);
 	}
 	
-	public static Client find(String value) {
+	public static Client findByPhone(String value) {
 		Client c = null;
 		Fecha f = new Fecha();
 		ResultSet rs = Model_Base.find(table_name, false,
@@ -101,6 +102,32 @@ public class Client extends Model_Base {
 		}
 		
 		return c;
+	}
+	
+	public static LinkedList<Client> find() {
+		LinkedList<Client> clients = new LinkedList<>();
+		Fecha f = new Fecha();
+		ResultSet rs = Model_Base.find(table_name, false,
+				new String[] {"1"}, 
+				new String[] {" = "},
+				new Object[] {1},
+				new char[] {'i'});
+		
+		if (rs != null) {
+			try {
+				f.setTime(rs.getDate("last_order"));
+				
+				clients.add(new Client(rs.getInt("client_id"),
+						getAddress(rs.getInt("last_address")),
+						f,
+						rs.getString("phone_number")));
+			} catch (SQLException e) {
+				System.err.println(e.getErrorCode() 
+						+ " - " + e.getLocalizedMessage());
+			}
+		}
+		
+		return clients;
 	}
 	
 	private static Address getAddress(int id) {

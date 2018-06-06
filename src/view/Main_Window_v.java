@@ -7,17 +7,15 @@ import javax.swing.JMenuItem;
 
 import base_classes.Panel_Base;
 
-import javax.swing.JMenu;
-
 public class Main_Window_v extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7125048035869540441L;
 	public JMenuBar menuBar;
-	public JMenu manageMenu;
-	public JMenuItem mntmCategorias;
-	public JMenuItem mntmProductos;
+	public JMenuItem menuData;
+	public JMenuItem menuOrders;
+	public JMenuItem menuContability;
 
 	public Main_Window_v() {
 		menu();
@@ -41,13 +39,13 @@ public class Main_Window_v extends JFrame {
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		manageMenu = new JMenu("Administrar");
-		menuBar.add(manageMenu);
+		menuOrders = new JMenuItem("Pedidos");
+		menuBar.add(menuOrders);
 		
-		mntmCategorias = new JMenuItem("Categorías");
-		manageMenu.add(mntmCategorias);
+		menuData = new JMenuItem("Administrar");
+		menuBar.add(menuData);
 		
-		mntmProductos = new JMenuItem("Productos");
-		manageMenu.add(mntmProductos);
+		menuContability = new JMenuItem("Contabilidad");
+		menuBar.add(menuContability);
 	}
 }

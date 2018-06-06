@@ -27,7 +27,7 @@ public class DB_Connection {
 		bse.setPassword("pass");
 		
 		try {
-			input = new FileInputStream("casa.properties");
+			input = new FileInputStream("connection.properties");
 			prop.load(input);
 			
 			databaseName = prop.getProperty("databaseName");

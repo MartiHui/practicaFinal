@@ -63,7 +63,7 @@ public class Order extends Model_Base {
 	// Constructor para el controlador
 	public Order(String phone_number, Integer num_table) {
 		if (phone_number != null) {
-			this.client = Client.find(phone_number);
+			this.client = Client.findByPhone(phone_number);
 			this.address = client.last_address;
 		} else {
 			this.client = null;
@@ -139,6 +139,37 @@ public class Order extends Model_Base {
 		}
 	}
 	
+	public static LinkedList<Order> findByClient(Client c) {
+		LinkedList<Order> orders = new LinkedList<>();
+		Fecha f = new Fecha();
+		ResultSet rs = Model_Base.find(table_name, false, 
+				new String[] {"client_id"}, 
+				new String[] {" = "},
+				new Object[] {c.client_id},
+				new char[] {'i'});
+		
+		try {
+			if (rs != null) {
+				f.setTime(rs.getDate("date"));
+				
+				orders.add(new Order(rs.getInt("order_id"),
+						rs.getInt("paidWithCash"),
+						getClient((Integer) rs.getObject("client_id")),
+						getAddress((Integer) rs.getObject("address_id")),
+						(Integer) rs.getObject("num_table"),
+						f,
+						rs.getBigDecimal("total_amount"),
+						rs.getInt("discount"),
+						rs.getString("comment")));
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		}
+		
+		return orders;
+	}
+	
 	public void addProduct(Order_Line product) {
 		boolean found = false;
 		for (Order_Line ol : this.lines) {
@@ -170,6 +201,18 @@ public class Order extends Model_Base {
 		}
 		
 		total_amount = total_amount.subtract(product.price.multiply(BigDecimal.valueOf(quantity)));
+	}
+	
+	public static BigDecimal totalOrders(LinkedList<Order> os) {
+		BigDecimal total = BigDecimal.valueOf(0);
+		for (Order o : os) {
+			BigDecimal price = o.total_amount.subtract(
+					o.total_amount.multiply(
+							BigDecimal.valueOf(o.discount)).divide(
+									BigDecimal.valueOf(100)));
+			total.add(price);
+		}
+		return total;
 	}
 	
 	public void getOrderLines() {
