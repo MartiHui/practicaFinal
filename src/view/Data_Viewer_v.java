@@ -4,6 +4,8 @@ import base_classes.Panel_Base;
 
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Data_Viewer_v extends Panel_Base {
 	/**
@@ -14,7 +16,11 @@ public class Data_Viewer_v extends Panel_Base {
 	public JButton categoryButton;
 	public JButton clientsButton;
 	public JButton addressButton;
+	
 	public JScrollPane dataPane;
+	
+	public JTextField searchText;
+	public JLabel searchLabel;
 	
 	public Data_Viewer_v() {
 		super();
@@ -22,6 +28,7 @@ public class Data_Viewer_v extends Panel_Base {
 		
 		table();
 		buttons();
+		search();
 	}
 	
 	private void table() {
@@ -46,5 +53,20 @@ public class Data_Viewer_v extends Panel_Base {
 		addressButton = new JButton("DIRECCIONES");
 		addressButton.setBounds(1158, 547, 209, 65);
 		add(addressButton);
+	}
+	
+	private void search() {
+		JLabel label = new JLabel("Buscar");
+		label.setBounds(1158, 645, 46, 14);
+		add(label);
+		
+		searchLabel = new JLabel("");
+		searchLabel.setBounds(1158, 670, 209, 14);
+		add(searchLabel);
+		
+		searchText = new JTextField();
+		searchText.setBounds(1158, 706, 209, 20);
+		add(searchText);
+		searchText.setColumns(10);
 	}
 }

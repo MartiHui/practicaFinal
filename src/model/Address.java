@@ -9,27 +9,26 @@ import base_classes.Model_Base;
 public class Address extends Model_Base {
 	private static String table_name = "addresses";
 	private static String[] columns = new String[] {
+			"client_id",
 			"address_name",
-			"address_details",
 			"zone",
 			"comment"};
 	private static char[] value_types = new char[] {
-			's',
+			'i',
 			's',
 			's',
 			's'};
 	
 	public int address_id;
+	public Client client;
 	public String address_name;
-	public String address_details;
 	public String zone;
 	public String comment;
 	
-	private Address(int address_id, String address_name, String address_details,
-			String zone, String comment) {
+	private Address(int address_id, Client client, String address_name, String zone, String comment) {
 		this.address_id = address_id;
+		this.client = client;
 		this.address_name = address_name;
-		this.address_details = address_details;
 		this.zone = zone;
 		this.comment = comment;
 	}
@@ -41,8 +40,8 @@ public class Address extends Model_Base {
 		try {
 			if (rs != null) {
 				a = new Address(id,
+						getClient(rs.getInt("client_id")),
 						rs.getString("address_name"),
-						rs.getString("address_details"),
 						rs.getString("zone"),
 						rs.getString("comment"));
 			}
@@ -83,8 +82,8 @@ public class Address extends Model_Base {
 				do {
 					addresses.add(new Address(
 							rs.getInt("address_id"),
+							getClient(rs.getInt("client_id")),
 							rs.getString("address_name"),
-							rs.getString("address_details"),
 							rs.getString("zone"),
 							rs.getString("comment")));
 				} while (rs.next());
@@ -110,8 +109,8 @@ public class Address extends Model_Base {
 				do {
 					addresses.add(new Address(
 							rs.getInt("address_id"),
+							getClient(rs.getInt("client_id")),
 							rs.getString("address_name"),
-							rs.getString("address_details"),
 							rs.getString("zone"),
 							rs.getString("comment")));
 				} while (rs.next());
@@ -127,23 +126,22 @@ public class Address extends Model_Base {
 	public void update() {
 		Object[] values = new Object[] {
 				address_name,
-				address_details,
 				zone,
 				comment};
 		
 		super.update(table_name, values, columns, value_types, "address_id", address_id);
 	}
 	
+	public void delete() {
+		super.delete(table_name, "address_id", this.address_id);
+	}
+	
 	public String toString() {
 		return this.address_name;
 	}
 	
-	public String fullAddress() {
-		String s = String.format("%s %s", this.address_name, this.address_details);
-		if (this.zone != null && !this.zone.equals("")) {
-			s += "(" + this.zone + ")";
-		}
-		return s;
+	private static Client getClient(Integer id) {
+		return Client.load(id);
 	}
 
 }

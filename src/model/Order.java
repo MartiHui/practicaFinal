@@ -115,7 +115,7 @@ public class Order extends Model_Base {
 		Object[] values = new Object[] {
 				paidWithCash,
 				(client==null)?null:client.client_id, // Para evitar NullPointerException
-				(address==null)?null:address.address_details,
+				(address==null)?null:address.address_id,
 				num_table,
 				new java.sql.Date(date.getTimeInMillis()),
 				total_amount,
