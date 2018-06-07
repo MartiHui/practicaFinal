@@ -27,10 +27,7 @@ public class Fecha extends GregorianCalendar implements Serializable {
 	}
 	
 	public String stringFechaReloj() {
-		return stringFecha()+" "+
-			   this.get(Calendar.HOUR_OF_DAY)+":"+
-			   this.get(Calendar.MINUTE)+":"+
-			   this.get(Calendar.SECOND);
+		return stringFecha()+" "+stringReloj();
 	}
 	
 	public String stringReloj() {

@@ -19,6 +19,8 @@ public class DB_Connection {
 	
 	public static Connection con = null;
 	
+	private static String connection = "connection.properties";
+	
 	public static void loadData() {
 		Properties prop = new Properties();
 		InputStream input = null;
@@ -27,7 +29,7 @@ public class DB_Connection {
 		bse.setPassword("pass");
 		
 		try {
-			input = new FileInputStream("casa.properties");
+			input = new FileInputStream(connection);
 			prop.load(input);
 			
 			databaseName = prop.getProperty("databaseName");
@@ -54,7 +56,7 @@ public class DB_Connection {
 		OutputStream output = null;
 		
 		try {
-			output = new FileOutputStream("casa.properties");
+			output = new FileOutputStream(connection);
 			
 			BasicTextEncryptor textencrypt = new BasicTextEncryptor();
 			textencrypt.setPassword("pass");

@@ -15,7 +15,7 @@ public class Main_Window_v extends JFrame {
 	public JMenuBar menuBar;
 	public JMenuItem menuData;
 	public JMenuItem menuOrders;
-	public JMenuItem menuContability;
+	public JMenuItem menuAccounting;
 
 	public Main_Window_v() {
 		menu();
@@ -45,7 +45,7 @@ public class Main_Window_v extends JFrame {
 		menuData = new JMenuItem("Administrar");
 		menuBar.add(menuData);
 		
-		menuContability = new JMenuItem("Contabilidad");
-		menuBar.add(menuContability);
+		menuAccounting = new JMenuItem("Contabilidad");
+		menuBar.add(menuAccounting);
 	}
 }

@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import utils.DB_Connection;
 
@@ -197,6 +198,9 @@ public abstract class Model_Base {
 					case 'd':
 						pstm.setNull(i+1, java.sql.Types.DATE);
 						break;
+						
+					case 't':
+						pstm.setNull(i+1, java.sql.Types.TIMESTAMP);
 					}
 				} else {
 					switch (value_types[i]) {
@@ -219,6 +223,9 @@ public abstract class Model_Base {
 					case 'd':
 						pstm.setDate(i+1, ((Date) values[i]));
 						break;
+						
+					case 't':
+						pstm.setTimestamp(i+1, ((Timestamp) values[i]));
 					}
 				}
 			}

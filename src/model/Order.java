@@ -25,7 +25,7 @@ public class Order extends Model_Base {
 			'i',
 			'i',
 			'i',
-			'd',
+			't',
 			'b',
 			'i',
 			's'
@@ -87,7 +87,7 @@ public class Order extends Model_Base {
 		
 		try {
 			if (rs != null) {
-				f.setTime(rs.getDate("date"));
+				f.setTime(rs.getTimestamp("date"));
 				
 				o = new Order(id,
 						rs.getInt("paidWithCash"),
@@ -112,12 +112,14 @@ public class Order extends Model_Base {
 	 * y una vez dentro de la base de datos no se podrá modificar para nada.
 	 */
 	public void insert() {
+		
+		System.out.println((new java.sql.Timestamp(date.getTimeInMillis())).toString());;
 		Object[] values = new Object[] {
 				paidWithCash,
 				(client==null)?null:client.client_id, // Para evitar NullPointerException
 				(address==null)?null:address.address_id,
 				num_table,
-				new java.sql.Date(date.getTimeInMillis()),
+				new java.sql.Timestamp(date.getTimeInMillis()),
 				total_amount,
 				discount,
 				comment
@@ -151,7 +153,46 @@ public class Order extends Model_Base {
 		try {
 			if (rs != null) {
 				do {
-					f.setTime(rs.getDate("date"));
+					f.setTime(rs.getTimestamp("date"));
+					orders.add(new Order(rs.getInt("order_id"), rs.getInt("paidWithCash"),
+							getClient((Integer) rs.getObject("client_id")),
+							getAddress((Integer) rs.getObject("address_id")), (Integer) rs.getObject("num_table"), f,
+							rs.getBigDecimal("total_amount"), rs.getInt("discount"), rs.getString("comment")));
+				} while (rs.next());
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		}
+		
+		return orders;
+	}
+	
+	public static LinkedList<Order> findByDate(Fecha fromDate, Fecha toDate) {
+		String[] col;
+		String[] com;
+		Object[] val;
+		char[] dt;
+		if (toDate == null) {
+			col = new String[] {"DATE(date)"};
+			com = new String[] {" = "};
+			val = new Object[] {new java.sql.Date(fromDate.getTimeInMillis())};
+			dt = new char[] {'d'};
+		} else {
+			col = new String[] {"DATE(date)", ""};
+			com = new String[] {" BETWEEN ", ""};
+			val = new Object[] {new java.sql.Date(fromDate.getTimeInMillis()), new java.sql.Date(toDate.getTimeInMillis())};
+			dt = new char[] {'d', 'd'};
+		}
+		
+		LinkedList<Order> orders = new LinkedList<>();
+		Fecha f = new Fecha();
+		ResultSet rs = Model_Base.find(table_name, false, col, com, val, dt);
+		
+		try {
+			if (rs != null) {
+				do {
+					f.setTime(rs.getTimestamp("date"));
 					orders.add(new Order(rs.getInt("order_id"), rs.getInt("paidWithCash"),
 							getClient((Integer) rs.getObject("client_id")),
 							getAddress((Integer) rs.getObject("address_id")), (Integer) rs.getObject("num_table"), f,
@@ -199,7 +240,7 @@ public class Order extends Model_Base {
 		total_amount = total_amount.subtract(product.price.multiply(BigDecimal.valueOf(quantity)));
 	}
 	
-	public static BigDecimal totalOrders(LinkedList<Order> os) {
+	public static BigDecimal ordersAddTotalDiscount(LinkedList<Order> os) {
 		BigDecimal total = BigDecimal.valueOf(0);
 		for (Order o : os) {
 			BigDecimal price = o.total_amount.subtract(
@@ -207,6 +248,14 @@ public class Order extends Model_Base {
 							BigDecimal.valueOf(o.discount)).divide(
 									BigDecimal.valueOf(100)));
 			total.add(price);
+		}
+		return total;
+	}
+	
+	public static BigDecimal ordersAddTotal(LinkedList<Order> os) {
+		BigDecimal total = BigDecimal.valueOf(0);
+		for (Order o : os) {
+			total.add(o.total_amount);
 		}
 		return total;
 	}

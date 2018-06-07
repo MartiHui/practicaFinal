@@ -177,7 +177,7 @@ public class Data_Viewer_c {
 		// Fill table
 		for (Client c : Client.find()) {
 			LinkedList<Order> o = Order.findByClient(c);
-			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order==null?null:c.last_order.stringFecha(), o.size(), Order.totalOrders(o)});
+			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order==null?null:c.last_order.stringFecha(), o.size(), Order.ordersAddTotalDiscount(o)});
 		}
 		
 		// Table listener
@@ -313,7 +313,7 @@ public class Data_Viewer_c {
 	private void showClientSearch(String s) {
 		for (Client c : Client.findBySimilarPhone(s)) {
 			LinkedList<Order> o = Order.findByClient(c);
-			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order==null?null:c.last_order.stringFecha(), o.size(), Order.totalOrders(o)});
+			clientTable.modelo.addRow(new Object[] {c.client_id, c.phone_number, c.last_order==null?null:c.last_order.stringFecha(), o.size(), Order.ordersAddTotalDiscount(o)});
 		}
 	}
 	

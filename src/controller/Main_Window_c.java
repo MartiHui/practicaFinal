@@ -83,6 +83,14 @@ public class Main_Window_c {
 				openOrdersViewer();
 			}
 		});
+		
+		view.menuAccounting.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openAccountingViewer();
+				
+			}
+		});
 	}
 	
 	private void saveOrder() {
@@ -99,6 +107,11 @@ public class Main_Window_c {
 	private void openOrdersViewer() {
 		saveOrder();
 		swapPanels(1, this.ordersViewer.view);
+	}
+	
+	private void openAccountingViewer() {
+		saveOrder();
+		swapPanels(-1, (new Accounting_c(this).view));
 	}
 	
 	public void swapPanels(int newPanel, Panel_Base p) {
