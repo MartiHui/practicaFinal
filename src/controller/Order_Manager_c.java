@@ -14,7 +14,7 @@ import model.Category;
 import model.Order;
 import model.Order_Line;
 import model.Product;
-import view.Product_Comment;
+import view.Comment_Viewer;
 
 public class Order_Manager_c {
 	public Main_Window_c main;
@@ -108,8 +108,7 @@ public class Order_Manager_c {
 	private void manageTable(int row, int column) {
 		switch (column) {
 		case 5: //Detalles
-			main.currentPanel = -1;
-			new Product_Comment(order.lines.get(row).comment, main);
+			new Comment_Viewer(order.lines.get(row).comment, main, 2);
 			break;
 			
 		case 6: // + cantidad
@@ -127,11 +126,7 @@ public class Order_Manager_c {
 	// TODO consola
 	
 	private void actPriceSection() {
-		BigDecimal price = order.total_amount.subtract(
-				order.total_amount.multiply(
-						BigDecimal.valueOf(order.discount)).divide(
-								BigDecimal.valueOf(100)));
-		view.totalText.setText(price.toString());
+		view.totalText.setText(order.getFinalPrice().toString());
 		
 		if (order.discount == 0) {
 			view.discountText.setVisible(false);

@@ -243,11 +243,7 @@ public class Order extends Model_Base {
 	public static BigDecimal ordersAddTotalDiscount(LinkedList<Order> os) {
 		BigDecimal total = BigDecimal.valueOf(0);
 		for (Order o : os) {
-			BigDecimal price = o.total_amount.subtract(
-					o.total_amount.multiply(
-							BigDecimal.valueOf(o.discount)).divide(
-									BigDecimal.valueOf(100)));
-			total.add(price);
+			total.add(o.getFinalPrice());
 		}
 		return total;
 	}
@@ -258,6 +254,15 @@ public class Order extends Model_Base {
 			total.add(o.total_amount);
 		}
 		return total;
+	}
+	
+	public BigDecimal getFinalPrice() {
+		BigDecimal price = this.total_amount.subtract(
+				this.total_amount.multiply(
+						BigDecimal.valueOf(this.discount)).divide(
+								BigDecimal.valueOf(100)));
+		
+		return price;
 	}
 	
 	public void getOrderLines() {

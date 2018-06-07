@@ -4,11 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import model.Order;
 import view.Orders_Viewer_v;
+import view.Comment_Viewer;
 
 public class Orders_Viewer_c {
 	public Main_Window_c main;
@@ -167,7 +172,16 @@ public class Orders_Viewer_c {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
-					manageOrder((String) view.localTable.getValueSelected(0));
+					System.out.println(view.localTable.tabla.getSelectedColumn());
+					if (view.localTable.tabla.getSelectedColumn() == 3) {
+						String s = (String) view.localTable.getValueSelected(4);
+						if (s != null && !s.equals("")) {
+							new Comment_Viewer(s, main, 1);
+						}
+					} else {
+						manageOrder((String) view.localTable.getValueSelected(0));
+				
+					}
 				}
 			}
 		});
@@ -176,7 +190,15 @@ public class Orders_Viewer_c {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
-					manageOrder((String) view.localTable.getValueSelected(0));
+					if (view.awayTable.tabla.getSelectedColumn() == 3) {
+						String s = (String) view.awayTable.getValueSelected(4);
+						if (!(s == null || s.equals(""))) {
+							new Comment_Viewer(s, main, 1);
+						}
+					} else {
+						manageOrder((String) view.awayTable.getValueSelected(0));
+				
+					}
 				}
 			}
 		});
@@ -215,9 +237,12 @@ public class Orders_Viewer_c {
 	}
 	
 	private Object[] orderToTablerow(Order o, boolean isLocal) {
+		ImageIcon info = new ImageIcon(getClass().getResource("../images/info.png"));
 		return new Object[] {isLocal?Integer.toString(o.num_table):o.client.phone_number,
 			o.date.stringReloj(),
-			o.total_amount.multiply(BigDecimal.valueOf(o.discount))};
+			o.getFinalPrice(),
+			(o.comment==null||o.comment.equals(""))?null:info,
+			o.comment};
 	}
 
 }

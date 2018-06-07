@@ -2,7 +2,6 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -109,16 +108,12 @@ public class Accounting_c {
 		}
 		
 		for (Order o : orders) {
-			BigDecimal price = o.total_amount.subtract(
-					o.total_amount.multiply(
-							BigDecimal.valueOf(o.discount)).divide(
-									BigDecimal.valueOf(100)));
 			view.ordersTable.modelo.addRow(new Object[] {
 					(o.num_table==null)?o.client.phone_number:Integer.toString(o.num_table),
 					o.date.stringFechaReloj(),
 					o.total_amount,
 					o.discount,
-					price});
+					o.getFinalPrice()});
 		}
 		
 		info();

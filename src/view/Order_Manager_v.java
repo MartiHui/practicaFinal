@@ -1,6 +1,6 @@
 package view;
 import javax.swing.JScrollPane;
-
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -20,6 +20,8 @@ import model.Product;
 
 import java.awt.Insets;
 import javax.swing.JTextArea;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class Order_Manager_v extends Panel_Base {
 	/**
@@ -56,6 +58,7 @@ public class Order_Manager_v extends Panel_Base {
 	public JTextArea commentText;
 	public JButton addComment;
 	public JButton addPrice;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 	
 	public Order_Manager_v(boolean isLocal) {
 		super();
@@ -102,7 +105,7 @@ public class Order_Manager_v extends Panel_Base {
 		add(orderPane);
 		
 		orderTable = new Table(new String[] {"product_id", "Cantidad", "Código", "Producto", "Precio/ud", "Precio total", "Detalles", "", ""},
-				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class},
+				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, String.class, String.class, ImageIcon.class, String.class, String.class},
 				new Integer[] {0, 3, 3, 100, 125, 125, 3, 3, 3},
 				null,
 				null,
@@ -113,7 +116,6 @@ public class Order_Manager_v extends Panel_Base {
 		orderTable.alinear('r', 3);
 		orderTable.alinear('r', 4);
 		orderTable.alinear('c', 5);
-		orderTable.alinear('c', 6);
 		orderTable.alinear('c', 7);
 		orderTable.tabla.getTableHeader().setEnabled(false);
 		orderPane.setViewportView(orderTable.tabla);
@@ -122,7 +124,7 @@ public class Order_Manager_v extends Panel_Base {
 	private void createConsole() {
 		console = new JTextField();
 		console.setBorder(new LineBorder(new Color(0, 0, 0)));
-		console.setBounds(972, 121, 458, 42);
+		console.setBounds(972, 78, 458, 42);
 		console.grabFocus();
 		add(console);
 		console.setColumns(10);
@@ -131,12 +133,12 @@ public class Order_Manager_v extends Panel_Base {
 	private void createSeparators() {
 		JSeparator separator = new JSeparator();
 		separator.setMinimumSize(new Dimension(10, 10));
-		separator.setBounds(972, 173, 458, 14);
+		separator.setBounds(972, 131, 458, 14);
 		add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setMinimumSize(new Dimension(10, 10));
-		separator_1.setBounds(972, 545, 458, 14);
+		separator_1.setBounds(972, 578, 458, 14);
 		add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
@@ -146,7 +148,7 @@ public class Order_Manager_v extends Panel_Base {
 		
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setMinimumSize(new Dimension(10, 10));
-		separator_3.setBounds(972, 759, 458, 14);
+		separator_3.setBounds(972, 792, 458, 14);
 		add(separator_3);
 	}
 	
@@ -172,11 +174,11 @@ public class Order_Manager_v extends Panel_Base {
 	
 	private void createProductSection() {
 		categoryBox = new JComboBox<model.Category>();
-		categoryBox.setBounds(972, 196, 201, 60);
+		categoryBox.setBounds(972, 143, 201, 60);
 		add(categoryBox);
 		
 		productBox = new JComboBox<Product>();
-		productBox.setBounds(1183, 196, 247, 60);
+		productBox.setBounds(1183, 143, 247, 60);
 		add(productBox);
 		
 		productButton = new JButton("A\u00F1adir...(Enter)");
@@ -186,29 +188,29 @@ public class Order_Manager_v extends Panel_Base {
 		
 		plusQuantity = new JButton("+");
 		plusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		plusQuantity.setBounds(1113, 267, 60, 60);
+		plusQuantity.setBounds(1113, 214, 60, 60);
 		add(plusQuantity);
 		
 		minusQuantity = new JButton("-");
 		minusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		minusQuantity.setBounds(972, 267, 60, 60);
+		minusQuantity.setBounds(972, 214, 60, 60);
 		add(minusQuantity);
 		
 		quantity = new JLabel("1");
 		quantity.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		quantity.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		quantity.setHorizontalAlignment(SwingConstants.CENTER);
-		quantity.setBounds(1042, 267, 65, 60);
+		quantity.setBounds(1038, 214, 65, 60);
 		add(quantity);
 	}
 	
 	private void createButtons() {
 		addDiscount = new JButton("A\u00F1adir descuento");
-		addDiscount.setBounds(972, 570, 158, 76);
+		addDiscount.setBounds(972, 603, 158, 76);
 		add(addDiscount);
 		
 		newProduct = new JButton("Crear nuevo producto");
-		newProduct.setBounds(1140, 570, 176, 76);
+		newProduct.setBounds(1140, 603, 176, 76);
 		add(newProduct);
 		
 		eliminate = new JButton("");
@@ -216,11 +218,11 @@ public class Order_Manager_v extends Panel_Base {
 		add(eliminate);
 		
 		ticket = new JButton("Sacar ticket");
-		ticket.setBounds(972, 657, 158, 91);
+		ticket.setBounds(972, 690, 158, 91);
 		add(ticket);
 		
 		orderEnd = new JButton("Finalizar pedido");
-		orderEnd.setBounds(1140, 656, 176, 92);
+		orderEnd.setBounds(1140, 689, 176, 92);
 		add(orderEnd);
 		
 		goBack = new JButton("");
@@ -266,16 +268,30 @@ public class Order_Manager_v extends Panel_Base {
 		dateText = new JLabel("");
 		dateText.setFont(new Font("Tahoma", Font.BOLD, 30));
 		dateText.setHorizontalAlignment(SwingConstants.CENTER);
-		dateText.setBounds(972, 784, 437, 60);
+		dateText.setBounds(972, 811, 437, 60);
 		add(dateText);
 		
 		addComment = new JButton("Comentario(F1)");
-		addComment.setBounds(1183, 267, 104, 60);
+		addComment.setBounds(1183, 214, 104, 60);
 		add(addComment);
 		
 		addPrice = new JButton("Precio(F2)");
-		addPrice.setBounds(1305, 267, 104, 60);
+		addPrice.setBounds(1305, 214, 104, 60);
 		add(addPrice);
+		
+		JLabel lblFormaDePago = new JLabel("Forma de pago:");
+		lblFormaDePago.setBounds(1326, 603, 83, 14);
+		add(lblFormaDePago);
+		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
+		buttonGroup.add(rdbtnNewRadioButton);
+		rdbtnNewRadioButton.setBounds(1321, 630, 109, 23);
+		add(rdbtnNewRadioButton);
+		
+		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("New radio button");
+		buttonGroup.add(rdbtnNewRadioButton_1);
+		rdbtnNewRadioButton_1.setBounds(1322, 656, 109, 23);
+		add(rdbtnNewRadioButton_1);
 	}
 	
 	private void createLocalElements() {

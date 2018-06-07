@@ -3,6 +3,8 @@ package view;
 import java.awt.Font;
 import java.math.BigDecimal;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -53,36 +55,38 @@ public class Orders_Viewer_v extends Panel_Base {
 		int initialX = 0;
 		int initialY = 50;
 		int separator = (1100 - 2*width)/3;
-		int column = (width/3)-1;
+		int column = (width/4)-1;
 		
 		localPane = new JScrollPane();
 		localPane.setBounds(initialX + separator, initialY, width, height);
 		add(localPane);
 		
-		localTable = new Table(new String[] {"Mesa nº", "Hora", "Total"},
-				new Class<?>[] {String.class, String.class, BigDecimal.class},
-				new Integer[] {column, column, column},
+		localTable = new Table(new String[] {"Mesa nº", "Hora", "Total", "Detalles", "comment"},
+				new Class<?>[] {String.class, String.class, BigDecimal.class,  ImageIcon.class, String.class},
+				new Integer[] {column, column, column, column, 0},
 				null,
 				null,
 				null);
 		localTable.alinear('c', 0);
 		localTable.alinear('c', 1);
 		localTable.alinear('c', 2);
+		localTable.hideColumn(4);
 		localPane.setViewportView(localTable.tabla);
 		
 		awayPane = new JScrollPane();
 		awayPane.setBounds(initialX + width + 2*separator, initialY, width, height);
 		add(awayPane);
 		
-		awayTable = new Table(new String[] {"Teléfono", "Hora", "Total"},
-				new Class<?>[] {String.class, String.class, BigDecimal.class},
-				new Integer[] {column, column, column},
+		awayTable = new Table(new String[] {"Teléfono", "Hora", "Total", "Detalles", "comment"},
+				new Class<?>[] {String.class, String.class, BigDecimal.class,  ImageIcon.class, String.class},
+				new Integer[] {column, column, column, column},
 				null,
 				null,
 				null);
 		awayTable.alinear('c', 0);
 		awayTable.alinear('c', 1);
 		awayTable.alinear('c', 2);
+		awayTable.hideColumn(4);
 		awayPane.setViewportView(awayTable.tabla);
 		
 		height = initialY;
