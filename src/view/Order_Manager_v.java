@@ -59,6 +59,7 @@ public class Order_Manager_v extends Panel_Base {
 	public JButton addComment;
 	public JButton addPrice;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JLabel priceLabel;
 	
 	public Order_Manager_v(boolean isLocal) {
 		super();
@@ -183,7 +184,7 @@ public class Order_Manager_v extends Panel_Base {
 		
 		productButton = new JButton("A\u00F1adir...(Enter)");
 		productButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		productButton.setBounds(972, 348, 458, 60);
+		productButton.setBounds(972, 285, 458, 60);
 		add(productButton);
 		
 		plusQuantity = new JButton("+");
@@ -292,6 +293,34 @@ public class Order_Manager_v extends Panel_Base {
 		buttonGroup.add(rdbtnNewRadioButton_1);
 		rdbtnNewRadioButton_1.setBounds(1322, 656, 109, 23);
 		add(rdbtnNewRadioButton_1);
+		
+		priceLabel = new JLabel("Nuevo precio:");
+		priceLabel.setBounds(972, 376, 91, 14);
+		add(priceLabel);
+		
+		JLabel productLabel = new JLabel("Nuevo producto:");
+		productLabel.setBounds(972, 356, 91, 14);
+		add(productLabel);
+		
+		JLabel productComment = new JLabel("Detalle:");
+		productComment.setBounds(972, 405, 91, 14);
+		add(productComment);
+		
+		JLabel newProductText = new JLabel("");
+		newProductText.setBounds(1099, 356, 217, 14);
+		add(newProductText);
+		
+		JLabel newPriceText = new JLabel("");
+		newPriceText.setBounds(1090, 376, 208, 14);
+		add(newPriceText);
+		
+		JLabel productCommentText = new JLabel("");
+		productCommentText.setBounds(1096, 405, 191, 14);
+		add(productCommentText);
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.setBounds(1341, 372, 89, 23);
+		add(btnNewButton);
 	}
 	
 	private void createLocalElements() {
