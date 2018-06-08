@@ -216,10 +216,10 @@ public class Product extends Model_Base {
 	public static LinkedList<Product> findByCategory(Integer id) {
 		LinkedList<Product> products = new LinkedList<Product>();
 		ResultSet rs = Model_Base.find(table_name, false, 
-				new String[] {"category_id"}, 
-				new String[] {" = "},
-				new Object[] {id},
-				new char[] {'i'});
+				new String[] {"category_id", " isActive"}, 
+				new String[] {" = ", " = "},
+				new Object[] {id, 1},
+				new char[] {'i', 'i'});
 		
 		if (rs != null) {
 			try {

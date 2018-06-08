@@ -25,7 +25,7 @@ public class Comment_Manager_c {
 		view.save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				om.order.comment = view.commentText.getText();
-				om.view.commentText.setText(om.order.comment);
+				om.view.orderCommentText.setText(om.order.comment);
 				main.currentPanel = 2;
 				exit();
 			}

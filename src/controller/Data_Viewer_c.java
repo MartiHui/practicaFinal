@@ -217,7 +217,8 @@ public class Data_Viewer_c {
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
 					Integer id = ((Integer) addressTable.getValueSelected(0));
-					new Address_Form_c(Data_Viewer_c.this, Address.load(id));
+					new Address_Form_c(Address.load(id), false);
+					addressTable();
 				}
 			}
 		});

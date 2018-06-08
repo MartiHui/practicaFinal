@@ -64,6 +64,9 @@ public class Order extends Model_Base {
 	public Order(String phone_number, Integer num_table) {
 		if (phone_number != null) {
 			this.client = Client.findByPhone(phone_number);
+			if (this.client == null) {
+				this.client = Client.insert(new Object[] {null, null, phone_number});
+			}
 			this.address = client.last_address;
 		} else {
 			this.client = null;

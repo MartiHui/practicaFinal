@@ -10,79 +10,164 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.LinkedList;
 
+import javax.swing.ImageIcon;
+
+import model.Address;
 import model.Category;
 import model.Order;
 import model.Order_Line;
 import model.Product;
 import view.Comment_Viewer;
+import view.Order_Manager_v;
 
 public class Order_Manager_c {
 	public Main_Window_c main;
-	public view.Order_Manager_v view;
+	public Order_Manager_v view;
+	
 	public Order order;
-	public String product_comment;
-	public BigDecimal product_price;
-	public boolean modifiedPrice;
 	
 	public Order_Manager_c(Order order, Main_Window_c main) {
 		this.main = main;
 		this.order = order;
-		this.product_comment = "";
-		this.product_price = BigDecimal.valueOf(0);
-		modifiedPrice = false;
-		view = new view.Order_Manager_v(order.isLocal);
+		
+		view = new Order_Manager_v(order.isLocal);
+		
 		fillData();
 		console();
-		createCommentListeners();
-		createTableListeners();
-		createProductListeners();
-		returnAndCancel();
-		buttonsListeners();
+		orderComment();
+		productsTable();
+		productSection();
+		buttons();
+		payMethod();
 	}
 	
 	public void fillData() {
 		if (order.isLocal) {
-			view.tableText.setText(Integer.toString(order.num_table));
+			view.numTableText.setText(Integer.toString(order.num_table));
 		} else {
-			//TODO
+			awayElements();
+			view.phoneText.setText(order.client.phone_number);
+			updateAddressBox();
 		}
 		
-		view.commentText.setText(order.comment);
-		view.dateText.setText(order.date.stringReloj());
+		view.orderCommentText.setText(order.comment);
 		
-		actPriceSection();
-		fillTable();
+		updateOrderData();
 		
 		view.repaint();
 		view.revalidate();
 	}
 	
-	public void fillTable() {
+	private void updateAddressBox() {
+		LinkedList<Address> addresses = Address.findByClient(order.client);
+		if (addresses.isEmpty()) {
+			manageAddress(Address.insert(new Object[] {order.client.client_id, null, null, null, 1}), true);
+			addresses = Address.findByClient(order.client);
+		}
+		Address la = order.client.last_address;
+		view.addressBox.removeAllItems();
+		for (Address a : addresses) {
+			if (Address.equals(la, a)) {
+				la = a;
+			}
+			view.addressBox.addItem(a);
+		}
+		if (la != null && addresses.contains(la)) {
+			view.addressBox.setSelectedItem(la);
+		}
+		updateAddressComment();
+	}
+	
+	private void updateAddressComment() {
+		try {
+			view.addressComment.setText(((Address) view.addressBox.getSelectedItem()).comment);
+		} catch (Exception e) {
+			view.addressComment.setText("");
+		}
+	}
+	
+	private void manageAddress(Address a, boolean newAddress) {
+		new Address_Form_c(a, newAddress);
+		updateAddressBox();
+	}
+	
+	private void awayElements() {
+		view.addressBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				order.address = ((Address) view.addressBox.getSelectedItem());
+				updateAddressComment();
+			}
+		});
+		
+		view.modifyAddress.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manageAddress((Address) view.addressBox.getSelectedItem(), false);
+			}
+		});
+		
+		view.addAddress.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				manageAddress(Address.insert(new Object[] {order.client.client_id, null, null, null, 1}), true);
+			}
+		});
+	}
+	
+	public void fillProductsTable() {
 		view.orderTable.modelo.setRowCount(0);
 		for (Order_Line ol : order.lines) {
+			ImageIcon info = new ImageIcon(getClass().getResource("../images/info.png"));
 			view.orderTable.modelo.addRow(new Object[] {ol.product.product_id,
 					ol.quantity,
 					ol.product.code,
 					ol.product.product_name,
 					ol.price,
 					ol.price.multiply(BigDecimal.valueOf(ol.quantity)).toString(),
-					"Ver detalles", // TODO cambiar por simbolito
+					(ol.comment==null||ol.comment.equals(""))?null:info, 
 					"+",
 					"-"});
 		}
 	}
 
-	public void createCommentListeners() {
-		view.commentButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				commentWindow();
+	private void productsTable() {
+		view.orderTable.tabla.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				manageTable(view.orderTable.tabla.getSelectedRow(), 
+						view.orderTable.tabla.getSelectedColumn());;
 			}
 		});
 	}
 	
-	private void commentWindow() {
-		main.currentPanel = -1;
-		new Comment_Manager_c(this, this.order.comment, main);
+	private void manageTable(int row, int column) {
+		switch (column) {
+		case 5: 
+			if (view.orderTable.getValueAt(row, column) != null) {
+				new Comment_Viewer(order.lines.get(row).comment, main, 2);
+			}
+			break;
+			
+		case 6:  
+			order.addProductThroughTable(order.lines.get(row));
+			updateOrderData();
+			break;
+			
+		case 7: 
+			order.removeProduct(order.lines.get(row), 1);
+			updateOrderData();
+			break;
+		}
+	}
+	
+	public void orderComment() {
+		view.orderCommentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				main.currentPanel = -1;
+				new Comment_Manager_c(Order_Manager_c.this, Order_Manager_c.this.order.comment, main);
+			}
+		});
 	}
 	
 	private void console() {
@@ -95,37 +180,9 @@ public class Order_Manager_c {
 		});
 	}
 	
-	private void createTableListeners() {
-		view.orderTable.tabla.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				manageTable(view.orderTable.tabla.getSelectedRow(), 
-						view.orderTable.tabla.getSelectedColumn());;
-			}
-		});
-	}
-	
-	private void manageTable(int row, int column) {
-		switch (column) {
-		case 5: //Detalles
-			new Comment_Viewer(order.lines.get(row).comment, main, 2);
-			break;
-			
-		case 6: // + cantidad
-			order.addProductThroughTable(order.lines.get(row));
-			actElements();
-			break;
-			
-		case 7: // - cantidad
-			order.removeProduct(order.lines.get(row), 1);
-			actElements();
-			break;
-		}
-	}
-	
 	// TODO consola
 	
-	private void actPriceSection() {
+	private void updatePriceSection() {
 		view.totalText.setText(order.getFinalPrice().toString());
 		
 		if (order.discount == 0) {
@@ -138,7 +195,7 @@ public class Order_Manager_c {
 		}
 	}
 	
-	private void createProductListeners() {
+	private void productSection() {
 		try {
 			LinkedList<Category> categories = Category.find();
 			for (Category c : categories) {
@@ -184,57 +241,26 @@ public class Order_Manager_c {
 		view.quantity.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				view.resetQuantity();
+				resetQuantity();
 			}
 		});
 		
-		view.productButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addProduct();
-			}
-		});
-
-		view.addComment.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				newComment();
-			}
-		});
-		
-		view.addPrice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				newPrice();
-			}
-		});
+		view.newPriceText.setValue(null);
 	}
 	
-	private void addProduct() {
-		Order_Line ol;
-		
-		if (modifiedPrice) {
-			ol = new Order_Line(this.order,
-					((Product) view.productBox.getSelectedItem()),
-					this.product_comment,
-					Integer.parseInt(view.quantity.getText()),
-					this.product_price);
-			modifiedPrice = false;
-		} else {
-			ol = new Order_Line(this.order,
-					((Product) view.productBox.getSelectedItem()),
-					this.product_comment,
-					Integer.parseInt(view.quantity.getText()),
-					this.order.isLocal);
+	public void newProduct() {
+		String s = view.console.getText();
+		if (!stringEmpty(s)) {
+			this.view.newProductText.setText(s);
 		}
-		
 		view.console.setText("");
-		this.product_comment = "";
-		view.resetQuantity();
-		
-		this.order.addProduct(ol);
-		actElements();
 	}
 	
 	public void newComment() {
-		this.product_comment = view.console.getText();
+		String s = view.console.getText();
+		if (!stringEmpty(s)) {
+			this.view.productComment.setText(s);
+		}
 		view.console.setText("");
 	}
 	
@@ -243,39 +269,77 @@ public class Order_Manager_c {
 			if (Float.parseFloat(view.console.getText()) <= 0) {
 				throw new Exception();
 			}
-			product_price = BigDecimal.valueOf(Float.parseFloat(view.console.getText())).setScale(2, RoundingMode.DOWN);
-			modifiedPrice = true;
-		} catch (Exception e) {}
+			this.view.newPriceText.setValue(BigDecimal.valueOf(Float.parseFloat(view.console.getText())).setScale(2, RoundingMode.DOWN));
+		} catch (Exception e) {
+			this.view.newPriceText.setValue(null);;
+		}
 		view.console.setText("");
 	}
 	
-	private void actElements() {
-		fillTable();
-		actPriceSection();
+	private void resetAlternativeData() {
+		view.newProductText.setText("");
+		view.newPriceText.setValue(null);
+		view.productComment.setText("");
 	}
 	
-	public void consoleEvent(int ascii) {
-		if (ascii == 10) {
-			addProduct();
-		}
-	}
-	
-	public void returnAndCancel() {
-		view.goBack.addActionListener(new ActionListener() {
+	private void buttons() {
+		view.addProduct.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (order.lines.isEmpty()) {
-					destroy();
-				}
-				exit();
+				addProduct();
 			}
 		});
 		
-		view.eliminate.addActionListener(new ActionListener() {
+		view.addDiscount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int num = Integer.parseInt(view.console.getText());
+					if (num < 0) {
+						throw new Exception();
+					}
+					order.discount = num;
+				} catch (Exception ex) {}
+				view.console.setText("");
+				updatePriceSection();
+			}
+		});
+		
+		view.eliminateOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				destroy();
 				exit();
 			}
 		});
+		
+		view.ticket.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				order.ticketOut = true;
+			}
+		});
+		
+		view.finishOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertOrder();
+			}
+		});
+	}
+	
+	public void payMethod() {
+		view.paidCash.setSelected(true);
+		view.paidCash.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				order.paidWithCash = 1;
+				System.out.println(order.paidWithCash);
+			}
+		});
+		
+		view.paidCard.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				order.paidWithCash = 0;
+				System.out.println(order.paidWithCash);
+			}
+		});;
 	}
 	
 	public void exit() {
@@ -291,42 +355,8 @@ public class Order_Manager_c {
 		if (order.isLocal) {
 			main.ordersViewer.localOrders.remove(order);
 		} else {
-			main.ordersViewer.localOrders.remove(order);
+			main.ordersViewer.awayOrders.remove(order);
 		}
-	}
-	
-	private void buttonsListeners() {
-		view.addDiscount.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					int num = Integer.parseInt(view.console.getText());
-					if (num < 0) {
-						throw new Exception();
-					}
-					order.discount = num;
-				} catch (Exception ex) {}
-				view.console.setText("");
-				actPriceSection();
-			}
-		});
-		
-		view.newProduct.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				createNewProduct();
-			}
-		});
-		
-		view.ticket.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				order.ticketOut = true;
-			}
-		});
-		
-		view.orderEnd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				insertOrder();
-			}
-		});
 	}
 	
 	private void insertOrder() {
@@ -335,29 +365,68 @@ public class Order_Manager_c {
 		exit();
 	}
 	
-	private void createNewProduct() {
-		String name = view.console.getText();
-		Product p = Product.insert(new Object[] {
-				null,
-				0,
-				name,
-				product_price==null?BigDecimal.valueOf(0):product_price,
-				product_price==null?BigDecimal.valueOf(0):product_price,
-				0});
-		
+	private void addProduct() {
 		Order_Line ol;
-		ol = new Order_Line(this.order,
-				p,
-				this.product_comment,
-				Integer.parseInt(view.quantity.getText()),
-				this.product_price);
-		modifiedPrice = false;
+		Product product;
+		String comment = "";
+		BigDecimal price = (BigDecimal) view.newPriceText.getValue();
+		int quantity;
+		
+		
+		if (!stringEmpty(view.newProductText.getText())) {
+			product = Product.insert(new Object[] {
+					1, 0, view.newProductText.getText(),
+					BigDecimal.valueOf(0),
+					BigDecimal.valueOf(0), 0});
+		} else {
+			product = ((Product) view.productBox.getSelectedItem());
+		}
+		
+		if (stringEmpty(view.console.getText())) {
+			quantity = Integer.parseInt(view.quantity.getText());
+		} else {
+			try {
+				quantity = Integer.parseInt(view.console.getText());
+			} catch (Exception e) {
+				quantity = Integer.parseInt(view.quantity.getText());
+			}
+		}
+		
+		if (!stringEmpty(view.productComment.getText())) {
+			comment = view.productComment.getText();
+		}
+		
+		if (price == null) {
+			ol = new Order_Line(this.order, product, comment,
+					quantity, this.order.isLocal);
+		} else {
+			ol = new Order_Line(this.order, product, comment,
+					quantity, price);
+		}
 		
 		view.console.setText("");
-		this.product_comment = "";
-		view.resetQuantity();
+		resetAlternativeData();
 		
 		this.order.addProduct(ol);
-		actElements();
+		updateOrderData();
+	}
+	
+	private void updateOrderData() {
+		fillProductsTable();
+		updatePriceSection();
+	}
+	
+	public void consoleEvent(int ascii) {
+		if (ascii == 10) {
+			addProduct();
+		}
+	}
+	
+	public void resetQuantity() {
+		view.quantity.setText("1");
+	}
+	
+	private boolean stringEmpty(String s) {
+		return (s == null || s.equals(""));
 	}
 }

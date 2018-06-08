@@ -3,7 +3,6 @@ package view;
 import java.awt.Font;
 import java.math.BigDecimal;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;

@@ -7,6 +7,8 @@ import javax.swing.JTextField;
 
 import base_classes.Panel_Base;
 import model.Address;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class Address_Form_v extends JDialog {
 	/**
@@ -18,10 +20,13 @@ public class Address_Form_v extends JDialog {
 	
 	public JTextField addressText;
 	public JTextField zoneText;
+	public JTextArea commentText;
 	
 	public JButton cancel;
 	public JButton save;
 	public JButton delete;
+	
+	public JLabel warning;
 	
 	public Address_Form_v(Address a) {
 		this.a = a;
@@ -42,37 +47,52 @@ public class Address_Form_v extends JDialog {
 	
 	private void labels() {
 		JLabel addressLabel = new JLabel("Calle:");
-		addressLabel.setBounds(30, 25, 46, 14);
+		addressLabel.setBounds(30, 51, 46, 14);
 		getContentPane().add(addressLabel);
 		
 		JLabel zoneLabel = new JLabel("Zona:");
-		zoneLabel.setBounds(30, 50, 46, 14);
+		zoneLabel.setBounds(30, 76, 46, 14);
 		getContentPane().add(zoneLabel);
+		
+		JLabel commentLabel = new JLabel("Detalles: ");
+		commentLabel.setBounds(30, 110, 46, 14);
+		getContentPane().add(commentLabel);
+		
+		warning = new JLabel("Este cliente no tiene direcciones en el registro. Crear una nueva calle");
+		warning.setBounds(30, 11, 338, 14);
+		getContentPane().add(warning);
 	}
 	
 	private void fillables() {
 		addressText = new JTextField();
-		addressText.setBounds(84, 22, 156, 20);
+		addressText.setBounds(86, 48, 256, 20);
 		getContentPane().add(addressText);
 		addressText.setColumns(10);
 		
 		zoneText = new JTextField();
-		zoneText.setBounds(84, 50, 156, 20);
+		zoneText.setBounds(84, 73, 256, 20);
 		getContentPane().add(zoneText);
 		zoneText.setColumns(10);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(86, 104, 256, 49);
+		getContentPane().add(scrollPane);
+		
+		commentText = new JTextArea();
+		scrollPane.setViewportView(commentText);
 	}
 	
 	private void buttons() {
 		cancel = new JButton("Cancelar");
-		cancel.setBounds(125, 102, 89, 23);
+		cancel.setBounds(129, 184, 89, 23);
 		getContentPane().add(cancel);
 		
 		save = new JButton("Guardar");
-		save.setBounds(26, 102, 89, 23);
+		save.setBounds(30, 184, 89, 23);
 		getContentPane().add(save);
 		
 		delete = new JButton("Eliminar");
-		delete.setBounds(226, 102, 89, 23);
+		delete.setBounds(228, 184, 89, 23);
 		getContentPane().add(delete);
 	}
 }

@@ -8,17 +8,22 @@ import view.Address_Form_v;
 
 public class Address_Form_c {
 	public Address_Form_v view;
-	public Data_Viewer_c dv;
 	public Address a;
 	
-	public Address_Form_c(Data_Viewer_c dv, Address a) {
-		this.dv = dv;
+	public Address_Form_c(Address a, boolean newAddress) {
 		this.a = a;
 		
 		this.view = new Address_Form_v(a);
 
 		fillData();
 		buttons();
+		
+		if (newAddress) {
+			view.delete.setEnabled(false);
+			view.warning.setVisible(true);
+		} else {
+			view.warning.setVisible(false);
+		}
 		
 		view.repaint();
 		view.revalidate();
@@ -31,6 +36,7 @@ public class Address_Form_c {
 			try {
 				view.addressText.setText(a.address_name);
 				view.zoneText.setText(a.zone);
+				view.commentText.setText(a.comment);
 			} catch (Exception e) {}
 		}
 	}
@@ -41,6 +47,7 @@ public class Address_Form_c {
 			public void actionPerformed(ActionEvent e) {
 				a.address_name = view.addressText.getText();
 				a.zone = view.zoneText.getText();
+				a.comment = view.commentText.getText();
 				a.update();
 				exit();
 			}
@@ -63,7 +70,6 @@ public class Address_Form_c {
 	}
 	
 	private void exit() {
-		dv.addressTable();
 		view.setVisible(false);
 		view.dispose();
 	}

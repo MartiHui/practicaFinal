@@ -1,7 +1,6 @@
 package utils;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -35,12 +34,4 @@ public class Fecha extends GregorianCalendar implements Serializable {
 				this.get(Calendar.HOUR_OF_DAY), 
 				this.get(Calendar.MINUTE));
 	}
-	
-	public static void setTime(Fecha fecha, Date date) {
-		if (date != null) {
-			fecha = new Fecha();
-			fecha.setTime(date);
-		}
-	}
-
 }

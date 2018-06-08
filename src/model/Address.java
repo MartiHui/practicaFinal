@@ -12,12 +12,14 @@ public class Address extends Model_Base {
 			"client_id",
 			"address_name",
 			"zone",
-			"comment"};
+			"comment",
+			"isActive"};
 	private static char[] value_types = new char[] {
 			'i',
 			's',
 			's',
-			's'};
+			's',
+			'i'};
 	
 	public int address_id;
 	public Client client;
@@ -53,6 +55,26 @@ public class Address extends Model_Base {
 		return a;
 	}
 	
+	public static Address load(Integer id, Client client) {
+		ResultSet rs = Model_Base.load(table_name, "address_id", id);
+		Address a = null;
+		
+		try {
+			if (rs != null) {
+				a = new Address(id,
+						client,
+						rs.getString("address_name"),
+						rs.getString("zone"),
+						rs.getString("comment"));
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getErrorCode() 
+					+ " - " + e.getLocalizedMessage());
+		}
+		
+		return a;
+	}
+	
 	public static Address insert(Object[] values) {
 		ResultSet rs = Model_Base.insert(table_name, values, columns, value_types);
 		Address a = null;
@@ -72,10 +94,10 @@ public class Address extends Model_Base {
 	public static LinkedList<Address> findByName(String value) {
 		LinkedList<Address> addresses = new LinkedList<>();
 		ResultSet rs = Model_Base.find(table_name, true,
-				new String[] {"address_name"},
-				new String[] {" LIKE "},
-				new Object[] {"%"+value+"%"},
-				new char[] {'s'});
+				new String[] {"address_name", "isActive"},
+				new String[] {" LIKE ", " = "},
+				new Object[] {"%"+value+"%", 1},
+				new char[] {'s', 'i'});
 		
 		if (rs != null) {
 			try {
@@ -99,10 +121,10 @@ public class Address extends Model_Base {
 	public static LinkedList<Address> findByClient(Client client) {
 		LinkedList<Address> addresses = new LinkedList<>();
 		ResultSet rs = Model_Base.find(table_name, true,
-				new String[] {"client_id"},
-				new String[] {" = "},
-				new Object[] {client.client_id},
-				new char[] {'i'});
+				new String[] {"client_id", "isActive"},
+				new String[] {" = ", " = "},
+				new Object[] {client.client_id, 1},
+				new char[] {'i', 'i'});
 		
 		if (rs != null) {
 			try {
@@ -128,29 +150,40 @@ public class Address extends Model_Base {
 				client.client_id,
 				address_name,
 				zone,
-				comment};
+				comment,
+				1};
 		
 		super.update(table_name, values, columns, value_types, "address_id", address_id);
 	}
 	
 	public void delete() {
-		try {
-			super.delete(table_name, "address_id", this.address_id);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println(e.getErrorCode() 
-					+ " - " + e.getLocalizedMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Object[] values = new Object[] {
+				client.client_id,
+				address_name,
+				zone,
+				comment,
+				0};
+		
+		super.update(table_name, values, columns, value_types, "address_id", address_id);
 	}
 	
 	public String toString() {
-		return this.address_name;
+		String s = this.address_name;
+		if (this.zone != null) {
+			s += " (" + this.zone + ")";
+		}
+		return s;
 	}
 	
 	private static Client getClient(Integer id) {
 		return Client.load(id);
 	}
 
+	public static boolean equals(Address a1, Address a2) {
+		if (a1 == null || a2 == null) {
+			return false;
+		} else {
+			return (a1.address_name.equals(a2.address_name));
+		}
+	}
 }

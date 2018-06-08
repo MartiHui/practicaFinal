@@ -4,11 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.math.BigDecimal;
 import java.util.LinkedList;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import model.Order;
@@ -172,7 +169,6 @@ public class Orders_Viewer_c {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(e.getClickCount()==2) {
-					System.out.println(view.localTable.tabla.getSelectedColumn());
 					if (view.localTable.tabla.getSelectedColumn() == 3) {
 						String s = (String) view.localTable.getValueSelected(4);
 						if (s != null && !s.equals("")) {

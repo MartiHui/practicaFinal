@@ -16,92 +16,85 @@ import javax.swing.border.TitledBorder;
 import base_classes.Panel_Base;
 import base_classes.Table;
 import model.Address;
+import model.Category;
 import model.Product;
 
 import java.awt.Insets;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import java.math.BigDecimal;
+import javax.swing.JFormattedTextField;
 
 public class Order_Manager_v extends Panel_Base {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8126866025712551977L;
-	public JScrollPane orderPane;
+	
 	public Table orderTable;
+
+	public JTextArea orderCommentText;
+	public JButton orderCommentButton;
+	
 	public JTextField console;
+	
 	public JLabel totalText;
+	public JLabel discountLabel;
 	public JLabel discountText;
-	public JButton productButton;
+
+	public JComboBox<Category> categoryBox;
+	public JComboBox<Product> productBox;
 	public JButton plusQuantity;
 	public JButton minusQuantity;
 	public JLabel quantity;
+	public JTextField newProductText;
+	public JFormattedTextField newPriceText;
+	public JTextArea productComment;
+	
+	public JButton addProduct;
 	public JButton addDiscount;
-	public JButton newProduct;
-	public JButton eliminate;
+	public JButton eliminateOrder;
 	public JButton ticket;
-	public JButton orderEnd;
-	public JButton goBack;
-	public JButton commentButton;
-	public JComboBox<model.Category> categoryBox;
-	public JComboBox<Product> productBox;
-	public JButton modifyAddress;
-	public JButton addAddress;
-	public JButton eliminateAddress;
+	public JButton finishOrder;
+	
 	public JLabel phoneText;
 	public JComboBox<Address> addressBox;
-	public JLabel tableText;
-	public JLabel dateText;
-	public JLabel discountLabel;
-	public JScrollPane commentPane;
-	public JTextArea commentText;
-	public JButton addComment;
-	public JButton addPrice;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JLabel priceLabel;
+	public JButton modifyAddress;
+	public JButton addAddress;
+	public JTextArea addressComment;
 	
+	public JLabel numTableText;
+	
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	public JRadioButton paidCash;
+	public JRadioButton paidCard;
+
 	public Order_Manager_v(boolean isLocal) {
 		super();
 		setLayout(null);
-		createCommentSection();
-		createLinesTable();
-		createConsole();
-		createSeparators();
-		createPriceSection();
-		createProductSection();
-		createButtons();
-		createDateSection();
+
+		productsTable();
+		orderComment();
+		console();
+		separators();
+		priceSection();
+		productSection();
+		buttons();
+		payMethod();
 		
 		if (isLocal) {
-			createLocalElements();
+			localElements();
 		} else {
-			createAwayElements();
+			awayElements();
 		}
 		
 		repaint();
 		revalidate();
 	}
 	
-	private void createCommentSection() {
-		commentButton = new JButton("Comentario: ");
-		commentButton.setMargin(new Insets(2, 2, 2, 2));
-		commentButton.setBounds(64, 121, 70, 42);
-		add(commentButton);
-		
-		commentText = new JTextArea();
-		commentText.setEditable(false);
-		commentText.setText("");
-		commentText.setLineWrap(true);
-		
-		commentPane = new JScrollPane();
-		commentPane.setBounds(144, 121, 818, 42);
-		commentPane.setViewportView(commentText);
-		add(commentPane);
-	}
-	
-	private void createLinesTable() {
-		orderPane = new JScrollPane();
+	private void productsTable() {
+		JScrollPane orderPane = new JScrollPane();
 		orderPane.setBounds(81, 173, 881, 671);
 		add(orderPane);
 		
@@ -111,6 +104,7 @@ public class Order_Manager_v extends Panel_Base {
 				null,
 				null,
 				null);
+		
 		orderTable.hideColumn(0);
 		orderTable.alinear('l', 1);
 		orderTable.alinear('l', 2);
@@ -118,124 +112,175 @@ public class Order_Manager_v extends Panel_Base {
 		orderTable.alinear('r', 4);
 		orderTable.alinear('c', 5);
 		orderTable.alinear('c', 7);
+		
 		orderTable.tabla.getTableHeader().setEnabled(false);
 		orderPane.setViewportView(orderTable.tabla);
 	}
 	
-	private void createConsole() {
+	private void orderComment() {
+		orderCommentButton = new JButton("Comentario: ");
+		orderCommentButton.setMargin(new Insets(2, 2, 2, 2));
+		orderCommentButton.setBounds(64, 121, 70, 42);
+		add(orderCommentButton);
+		
+		orderCommentText = new JTextArea();
+		orderCommentText.setEditable(false);
+		orderCommentText.setText("");
+		orderCommentText.setLineWrap(true);
+		
+		JScrollPane commentPane = new JScrollPane();
+		commentPane.setBounds(144, 121, 818, 42);
+		commentPane.setViewportView(orderCommentText);
+		add(commentPane);
+	}
+
+	private void console() {
 		console = new JTextField();
 		console.setBorder(new LineBorder(new Color(0, 0, 0)));
-		console.setBounds(972, 78, 458, 42);
+		console.setBounds(972, 121, 458, 42);
 		console.grabFocus();
 		add(console);
 		console.setColumns(10);
+		
+		JLabel consoleInfo = new JLabel("F1: Nuevo producto   F2: Nuevo precio  F3: Detalle de producto Enter: A\u00F1adir");
+		consoleInfo.setBounds(972, 173, 458, 14);
+		add(consoleInfo);
 	}
 	
-	private void createSeparators() {
+	private void separators() {
 		JSeparator separator = new JSeparator();
 		separator.setMinimumSize(new Dimension(10, 10));
-		separator.setBounds(972, 131, 458, 14);
+		separator.setBounds(972, 192, 458, 14);
 		add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setMinimumSize(new Dimension(10, 10));
-		separator_1.setBounds(972, 578, 458, 14);
+		separator_1.setBounds(972, 641, 458, 14);
 		add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setMinimumSize(new Dimension(10, 10));
-		separator_2.setBounds(972, 430, 458, 14);
+		separator_2.setBounds(972, 484, 458, 14);
 		add(separator_2);
-		
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setMinimumSize(new Dimension(10, 10));
-		separator_3.setBounds(972, 792, 458, 14);
-		add(separator_3);
 	}
 	
-	private void createPriceSection() {
+	private void priceSection() {
 		JLabel totalLabel = new JLabel("TOTAL:");
-		totalLabel.setBounds(972, 449, 46, 14);
+		totalLabel.setBounds(972, 512, 46, 14);
 		add(totalLabel);
 		
 		totalText = new JLabel("");
 		totalText.setFont(new Font("Tahoma", Font.BOLD, 27));
-		totalText.setBounds(972, 474, 201, 60);
+		totalText.setBounds(972, 537, 201, 60);
 		add(totalText);
 		
 		discountLabel = new JLabel("DESCUENTO:");
-		discountLabel.setBounds(1183, 449, 82, 14);
+		discountLabel.setBounds(1183, 509, 82, 14);
 		add(discountLabel);
 		
 		discountText = new JLabel("");
 		discountText.setFont(new Font("Tahoma", Font.BOLD, 27));
-		discountText.setBounds(1183, 474, 201, 60);
+		discountText.setBounds(1174, 554, 201, 60);
 		add(discountText);
 	}
 	
-	private void createProductSection() {
-		categoryBox = new JComboBox<model.Category>();
-		categoryBox.setBounds(972, 143, 201, 60);
+	private void productSection() {
+		categoryBox = new JComboBox<Category>();
+		categoryBox.setBounds(972, 217, 201, 60);
 		add(categoryBox);
 		
 		productBox = new JComboBox<Product>();
-		productBox.setBounds(1183, 143, 247, 60);
+		productBox.setBounds(1183, 217, 247, 60);
 		add(productBox);
-		
-		productButton = new JButton("A\u00F1adir...(Enter)");
-		productButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		productButton.setBounds(972, 285, 458, 60);
-		add(productButton);
 		
 		plusQuantity = new JButton("+");
 		plusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		plusQuantity.setBounds(1113, 214, 60, 60);
+		plusQuantity.setBounds(1116, 288, 60, 60);
 		add(plusQuantity);
 		
 		minusQuantity = new JButton("-");
 		minusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		minusQuantity.setBounds(972, 214, 60, 60);
+		minusQuantity.setBounds(972, 288, 60, 60);
 		add(minusQuantity);
 		
 		quantity = new JLabel("1");
 		quantity.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		quantity.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		quantity.setHorizontalAlignment(SwingConstants.CENTER);
-		quantity.setBounds(1038, 214, 65, 60);
+		quantity.setBounds(1041, 291, 65, 60);
 		add(quantity);
+		
+		// Alternative product data
+		JLabel newProductLabel = new JLabel("Nuevo producto:");
+		newProductLabel.setBounds(972, 374, 91, 14);
+		add(newProductLabel);
+		
+		JLabel newPriceLabel = new JLabel("Nuevo precio:");
+		newPriceLabel.setBounds(972, 399, 91, 14);
+		add(newPriceLabel);
+		
+		JLabel productCommentLabel = new JLabel("Detalle:");
+		productCommentLabel.setBounds(972, 424, 91, 14);
+		add(productCommentLabel);
+		
+		newProductText = new JTextField();
+		newProductText.setBounds(1073, 371, 347, 20);
+		add(newProductText);
+		newProductText.setColumns(10);
+		
+		newPriceText = new JFormattedTextField(new BigDecimal(0));
+		newPriceText.setBounds(1073, 396, 347, 20);
+		add(newPriceText);
+		newPriceText.setValue(null);
+		
+		JScrollPane productCommentPane = new JScrollPane();
+		productCommentPane.setBounds(1073, 424, 347, 42);
+		add(productCommentPane);
+		
+		productComment = new JTextArea();
+		productCommentPane.setViewportView(productComment);
 	}
 	
-	private void createButtons() {
+	private void buttons() {
+		addProduct = new JButton("A\u00F1adir...");
+		addProduct.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		addProduct.setBounds(1183, 288, 237, 60);
+		add(addProduct);
+		
 		addDiscount = new JButton("A\u00F1adir descuento");
-		addDiscount.setBounds(972, 603, 158, 76);
+		addDiscount.setBounds(972, 666, 158, 76);
 		add(addDiscount);
 		
-		newProduct = new JButton("Crear nuevo producto");
-		newProduct.setBounds(1140, 603, 176, 76);
-		add(newProduct);
-		
-		eliminate = new JButton("");
-		eliminate.setBounds(1360, 11, 70, 58);
-		add(eliminate);
+		eliminateOrder = new JButton("");
+		eliminateOrder.setBounds(1360, 11, 70, 58);
+		add(eliminateOrder);
 		
 		ticket = new JButton("Sacar ticket");
-		ticket.setBounds(972, 690, 158, 91);
+		ticket.setBounds(1140, 670, 158, 68);
 		add(ticket);
 		
-		orderEnd = new JButton("Finalizar pedido");
-		orderEnd.setBounds(1140, 689, 176, 92);
-		add(orderEnd);
-		
-		goBack = new JButton("");
-		goBack.setBounds(10, 11, 60, 60);
-		add(goBack);
-		
-		JLabel tableLabel = new JLabel("Mesa n\u00BA: ");
-		tableLabel.setBounds(102, 37, 46, 14);
-		add(tableLabel);
+		finishOrder = new JButton("Finalizar pedido");
+		finishOrder.setBounds(1140, 752, 176, 92);
+		add(finishOrder);
 	}
 	
-	private void createAwayElements() {
+	private void payMethod() {
+		JLabel lblFormaDePago = new JLabel("Forma de pago:");
+		lblFormaDePago.setBounds(999, 758, 83, 14);
+		add(lblFormaDePago);
+		
+		paidCash = new JRadioButton("Efectivo");
+		buttonGroup.add(paidCash);
+		paidCash.setBounds(997, 779, 109, 23);
+		add(paidCash);
+		
+		paidCard = new JRadioButton("Tarjeta");
+		buttonGroup.add(paidCard);
+		paidCard.setBounds(999, 805, 109, 23);
+		add(paidCard);
+	}
+	
+	private void awayElements() {
 		JLabel phoneLabel = new JLabel("Tel\u00E9fono: ");
 		phoneLabel.setBounds(81, 22, 53, 14);
 		add(phoneLabel);
@@ -249,8 +294,18 @@ public class Order_Manager_v extends Panel_Base {
 		add(addressLabel);
 		
 		addressBox = new JComboBox<Address>();
-		addressBox.setBounds(123, 50, 618, 20);
+		addressBox.setBounds(123, 50, 436, 20);
 		add(addressBox);
+		
+		addressComment = new JTextArea();
+		addressComment.setEditable(false);
+		addressComment.setText("");
+		addressComment.setLineWrap(true);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(593, 50, 350, 42);
+		scrollPane.setViewportView(addressComment);
+		add(scrollPane);
 		
 		modifyAddress = new JButton("Modificar calle");
 		modifyAddress.setBounds(123, 80, 135, 23);
@@ -259,77 +314,15 @@ public class Order_Manager_v extends Panel_Base {
 		addAddress = new JButton("Nueva calle");
 		addAddress.setBounds(266, 80, 125, 23);
 		add(addAddress);
-		
-		eliminateAddress = new JButton("Eliminar calle");
-		eliminateAddress.setBounds(401, 80, 158, 23);
-		add(eliminateAddress);
 	}
 	
-	private void createDateSection() {
-		dateText = new JLabel("");
-		dateText.setFont(new Font("Tahoma", Font.BOLD, 30));
-		dateText.setHorizontalAlignment(SwingConstants.CENTER);
-		dateText.setBounds(972, 811, 437, 60);
-		add(dateText);
+	private void localElements() {
+		numTableText = new JLabel("");
+		numTableText.setBounds(160, 37, 46, 14);
+		add(numTableText);
 		
-		addComment = new JButton("Comentario(F1)");
-		addComment.setBounds(1183, 214, 104, 60);
-		add(addComment);
-		
-		addPrice = new JButton("Precio(F2)");
-		addPrice.setBounds(1305, 214, 104, 60);
-		add(addPrice);
-		
-		JLabel lblFormaDePago = new JLabel("Forma de pago:");
-		lblFormaDePago.setBounds(1326, 603, 83, 14);
-		add(lblFormaDePago);
-		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
-		buttonGroup.add(rdbtnNewRadioButton);
-		rdbtnNewRadioButton.setBounds(1321, 630, 109, 23);
-		add(rdbtnNewRadioButton);
-		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("New radio button");
-		buttonGroup.add(rdbtnNewRadioButton_1);
-		rdbtnNewRadioButton_1.setBounds(1322, 656, 109, 23);
-		add(rdbtnNewRadioButton_1);
-		
-		priceLabel = new JLabel("Nuevo precio:");
-		priceLabel.setBounds(972, 376, 91, 14);
-		add(priceLabel);
-		
-		JLabel productLabel = new JLabel("Nuevo producto:");
-		productLabel.setBounds(972, 356, 91, 14);
-		add(productLabel);
-		
-		JLabel productComment = new JLabel("Detalle:");
-		productComment.setBounds(972, 405, 91, 14);
-		add(productComment);
-		
-		JLabel newProductText = new JLabel("");
-		newProductText.setBounds(1099, 356, 217, 14);
-		add(newProductText);
-		
-		JLabel newPriceText = new JLabel("");
-		newPriceText.setBounds(1090, 376, 208, 14);
-		add(newPriceText);
-		
-		JLabel productCommentText = new JLabel("");
-		productCommentText.setBounds(1096, 405, 191, 14);
-		add(productCommentText);
-		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(1341, 372, 89, 23);
-		add(btnNewButton);
-	}
-	
-	private void createLocalElements() {
-		tableText = new JLabel("");
-		tableText.setBounds(160, 37, 46, 14);
-		add(tableText);
-	}
-	
-	public void resetQuantity() {
-		this.quantity.setText("1");
+		JLabel tableLabel = new JLabel("Mesa n\u00BA: ");
+		tableLabel.setBounds(102, 37, 46, 14);
+		add(tableLabel);
 	}
 }
