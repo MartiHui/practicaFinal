@@ -1,4 +1,4 @@
-package base_classes;
+package utils;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -51,8 +51,8 @@ public class Panel_Base extends JPanel {
 	private void clock_v() {
 		int width = 340;
 		int height = 30;
-		int initialX = 1050;
-		int initialY = 50;
+		int initialX = 1100;
+		int initialY = 10;
 		
 		date = new JLabel("");
 		date.setFont(new Font("Tahoma", Font.PLAIN, 20));

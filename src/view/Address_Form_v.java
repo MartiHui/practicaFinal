@@ -5,10 +5,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import base_classes.Panel_Base;
 import model.Address;
+import utils.Panel_Base;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 public class Address_Form_v extends JDialog {
 	/**
@@ -42,40 +44,41 @@ public class Address_Form_v extends JDialog {
 	private void properties() {
 		this.setTitle("Dirección");
 		this.setResizable(false);
-		this.setBounds(Panel_Base.centrar(400, 300));
+		this.setBounds(Panel_Base.centrar(400, 275));
 	}
 	
 	private void labels() {
 		JLabel addressLabel = new JLabel("Calle:");
-		addressLabel.setBounds(30, 51, 46, 14);
+		addressLabel.setBounds(30, 35, 50, 20);
 		getContentPane().add(addressLabel);
 		
 		JLabel zoneLabel = new JLabel("Zona:");
-		zoneLabel.setBounds(30, 76, 46, 14);
+		zoneLabel.setBounds(30, 75, 50, 20);
 		getContentPane().add(zoneLabel);
 		
 		JLabel commentLabel = new JLabel("Detalles: ");
-		commentLabel.setBounds(30, 110, 46, 14);
+		commentLabel.setBounds(30, 115, 50, 20);
 		getContentPane().add(commentLabel);
 		
 		warning = new JLabel("Este cliente no tiene direcciones en el registro. Crear una nueva calle");
-		warning.setBounds(30, 11, 338, 14);
+		warning.setHorizontalAlignment(SwingConstants.CENTER);
+		warning.setBounds(10, 11, 374, 14);
 		getContentPane().add(warning);
 	}
 	
 	private void fillables() {
 		addressText = new JTextField();
-		addressText.setBounds(86, 48, 256, 20);
+		addressText.setBounds(85, 35, 260, 20);
 		getContentPane().add(addressText);
 		addressText.setColumns(10);
 		
 		zoneText = new JTextField();
-		zoneText.setBounds(84, 73, 256, 20);
+		zoneText.setBounds(85, 73, 260, 20);
 		getContentPane().add(zoneText);
 		zoneText.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(86, 104, 256, 49);
+		scrollPane.setBounds(85, 115, 260, 50);
 		getContentPane().add(scrollPane);
 		
 		commentText = new JTextArea();
@@ -84,15 +87,15 @@ public class Address_Form_v extends JDialog {
 	
 	private void buttons() {
 		cancel = new JButton("Cancelar");
-		cancel.setBounds(129, 184, 89, 23);
+		cancel.setBounds(143, 190, 90, 25);
 		getContentPane().add(cancel);
 		
 		save = new JButton("Guardar");
-		save.setBounds(30, 184, 89, 23);
+		save.setBounds(30, 190, 90, 25);
 		getContentPane().add(save);
 		
 		delete = new JButton("Eliminar");
-		delete.setBounds(228, 184, 89, 23);
+		delete.setBounds(256, 190, 90, 25);
 		getContentPane().add(delete);
 	}
 }

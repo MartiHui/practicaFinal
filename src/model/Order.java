@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-import base_classes.Model_Base;
 import utils.Fecha;
+import utils.Model_Base;
 
 public class Order extends Model_Base {
 	private static String table_name = "orders";
@@ -228,7 +228,7 @@ public class Order extends Model_Base {
 	
 	public void addProductThroughTable(Order_Line product) {
 		product.quantity++;
-		this.total_amount.add(product.price);
+		total_amount = total_amount.add(product.price);
 	}
 	
 	public void removeProduct(Order_Line product, int quantity) {
@@ -243,10 +243,18 @@ public class Order extends Model_Base {
 		total_amount = total_amount.subtract(product.price.multiply(BigDecimal.valueOf(quantity)));
 	}
 	
+	public void removeProductThroughTable(Order_Line product) {
+		product.quantity--;
+		total_amount = total_amount.subtract(product.price);
+		if (product.quantity < 1) {
+			this.lines.remove(product);
+		}
+	}
+	
 	public static BigDecimal ordersAddTotalDiscount(LinkedList<Order> os) {
 		BigDecimal total = BigDecimal.valueOf(0);
 		for (Order o : os) {
-			total.add(o.getFinalPrice());
+			total = total.add(o.getFinalPrice());
 		}
 		return total;
 	}
@@ -254,7 +262,7 @@ public class Order extends Model_Base {
 	public static BigDecimal ordersAddTotal(LinkedList<Order> os) {
 		BigDecimal total = BigDecimal.valueOf(0);
 		for (Order o : os) {
-			total.add(o.total_amount);
+			total = total.add(o.total_amount);
 		}
 		return total;
 	}

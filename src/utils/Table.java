@@ -1,4 +1,4 @@
-package base_classes;
+package utils;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -16,9 +16,9 @@ import javax.swing.table.TableCellRenderer;
 public class Table {
 	public JTable tabla;
 	public DefaultTableModel modelo;
-	public Color colorPar=SystemColor.menu;
-	public Color colorImpar=Color.WHITE;
-	public Color colorSel=UIManager.getColor("Table.selectionBackground");
+	public static Color colorPar=SystemColor.menu;
+	public static Color colorImpar=Color.WHITE;
+	public static Color colorSel=UIManager.getColor("Table.selectionBackground");
 	private DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 	private DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 	private DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();

@@ -20,6 +20,7 @@ public class Address_Form_c {
 		
 		if (newAddress) {
 			view.delete.setEnabled(false);
+			view.cancel.setEnabled(false);
 			view.warning.setVisible(true);
 		} else {
 			view.warning.setVisible(false);

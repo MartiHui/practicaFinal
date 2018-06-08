@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import base_classes.Panel_Base;
+import utils.Panel_Base;
 
 import javax.swing.JButton;
 
@@ -36,22 +36,22 @@ public class Comment_Manager_v extends JDialog{
 	private void properties() {
 		this.setTitle("Comentario");
 		this.setResizable(false);
-		this.setBounds(Panel_Base.centrar(500, 400));
+		this.setBounds(Panel_Base.centrar(460, 280));
 	}
 	
 	private void buttons() {
-		cancel = new JButton("CANCELAR");
-		cancel.setBounds(267, 211, 89, 23);
+		cancel = new JButton("Cancelar");
+		cancel.setBounds(286, 195, 90, 25);
 		getContentPane().add(cancel);
 		
-		save = new JButton("GUARDAR");
-		save.setBounds(64, 211, 89, 23);
+		save = new JButton("Guardar");
+		save.setBounds(70, 195, 90, 25);
 		getContentPane().add(save);
 	}
 	
 	private void textElements() {
 		JLabel commentLabel = new JLabel("Comentario:");
-		commentLabel.setBounds(10, 11, 77, 33);
+		commentLabel.setBounds(30, 20, 75, 30);
 		getContentPane().add(commentLabel);
 		
 		commentText = new JTextArea();
@@ -60,7 +60,7 @@ public class Comment_Manager_v extends JDialog{
 		commentText.requestFocus();
 		
 		JScrollPane commentScrollPane = new JScrollPane();
-		commentScrollPane.setBounds(20, 55, 390, 132);
+		commentScrollPane.setBounds(30, 50, 390, 130);
 		commentScrollPane.setViewportView(commentText);
 		getContentPane().add(commentScrollPane);
 	}

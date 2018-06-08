@@ -5,8 +5,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import base_classes.Panel_Base;
 import model.Category;
+import utils.Panel_Base;
 
 public class Category_Form_v extends JDialog {
 	/**
@@ -36,33 +36,33 @@ public class Category_Form_v extends JDialog {
 	private void properties() {
 		this.setTitle("Categoría");
 		this.setResizable(false);
-		this.setBounds(Panel_Base.centrar(400, 150));
+		this.setBounds(Panel_Base.centrar(400, 140));
 	}
 	
 	private void labels() {
 		JLabel nameLabel = new JLabel("Nombre:");
-		nameLabel.setBounds(30, 25, 46, 14);
+		nameLabel.setBounds(30, 25, 50, 20);
 		getContentPane().add(nameLabel);
 	}
 	
 	private void fillables() {
 		nameText = new JTextField();
-		nameText.setBounds(84, 22, 156, 20);
+		nameText.setBounds(90, 25, 256, 20);
 		getContentPane().add(nameText);
 		nameText.setColumns(10);
 	}
 	
 	private void buttons() {
 		cancel = new JButton("Cancelar");
-		cancel.setBounds(129, 67, 89, 23);
+		cancel.setBounds(143, 65, 90, 25);
 		getContentPane().add(cancel);
 		
 		save = new JButton("Guardar");
-		save.setBounds(30, 67, 89, 23);
+		save.setBounds(30, 65, 90, 25);
 		getContentPane().add(save);
 		
 		delete = new JButton("Eliminar");
-		delete.setBounds(228, 67, 89, 23);
+		delete.setBounds(256, 65, 90, 25);
 		getContentPane().add(delete);
 	}
 }

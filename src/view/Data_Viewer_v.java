@@ -1,11 +1,12 @@
 package view;
 
-import base_classes.Panel_Base;
-
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import utils.Panel_Base;
+import java.awt.Font;
 
 public class Data_Viewer_v extends Panel_Base {
 	/**
@@ -33,39 +34,45 @@ public class Data_Viewer_v extends Panel_Base {
 	
 	private void table() {
 		dataPane = new JScrollPane();
-		dataPane.setBounds(39, 37, 1065, 812);
+		dataPane.setBounds(40, 40, 1060, 750);
 		add(dataPane);
 	}
 	
 	private void buttons() {
 		productsButton = new JButton("PRODUCTOS");
-		productsButton.setBounds(1158, 236, 209, 71);
+		productsButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+		productsButton.setBounds(1150, 200, 230, 70);
 		add(productsButton);
 		
 		categoryButton = new JButton("CATEGOR\u00CDAS");
-		categoryButton.setBounds(1158, 343, 209, 71);
+		categoryButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+		categoryButton.setBounds(1150, 300, 230, 70);
 		add(categoryButton);
 		
 		clientsButton = new JButton("CLIENTES");
-		clientsButton.setBounds(1158, 446, 209, 71);
+		clientsButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+		clientsButton.setBounds(1150, 400, 230, 70);
 		add(clientsButton);
 		
 		addressButton = new JButton("DIRECCIONES");
-		addressButton.setBounds(1158, 547, 209, 65);
+		addressButton.setFont(new Font("Tahoma", Font.BOLD, 20));
+		addressButton.setBounds(1150, 500, 230, 70);
 		add(addressButton);
 	}
 	
 	private void search() {
 		JLabel label = new JLabel("Buscar");
-		label.setBounds(1158, 645, 46, 14);
+		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		label.setBounds(1150, 81, 46, 14);
 		add(label);
 		
 		searchLabel = new JLabel("");
-		searchLabel.setBounds(1158, 670, 209, 14);
+		searchLabel.setBounds(1150, 106, 230, 14);
 		add(searchLabel);
 		
 		searchText = new JTextField();
-		searchText.setBounds(1158, 706, 209, 20);
+		searchText.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		searchText.setBounds(1150, 120, 230, 30);
 		add(searchText);
 		searchText.setColumns(10);
 	}

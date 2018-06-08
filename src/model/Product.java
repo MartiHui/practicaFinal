@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-import base_classes.Model_Base;
 import utils.DB_Connection;
+import utils.Model_Base;
 
 public class Product extends Model_Base {
 	private static String table_name = "products";

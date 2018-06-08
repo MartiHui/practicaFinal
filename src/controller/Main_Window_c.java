@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import base_classes.Panel_Base;
+import utils.Panel_Base;
 import view.Main_Window_v;
 
 public class Main_Window_c {
@@ -46,9 +46,11 @@ public class Main_Window_c {
 						ordersViewer.console(e.getKeyChar());
 					} else if (currentPanel == 2) {
 						if (e.getKeyCode() == KeyEvent.VK_F1) {
-							orderManager.newComment();
+							orderManager.newProduct();
 						} else if (e.getKeyCode() == KeyEvent.VK_F2) {
 							orderManager.newPrice();
+						} else if (e.getKeyCode() == KeyEvent.VK_F2) {
+							orderManager.newComment();
 						} else {
 							orderManager.consoleEvent(e.getKeyChar());
 						}

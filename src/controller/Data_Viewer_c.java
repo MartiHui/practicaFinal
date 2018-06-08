@@ -10,10 +10,10 @@ import java.util.LinkedList;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import base_classes.Table;
 import model.Address;
 import model.Category;
 import model.Product;
+import utils.Table;
 import model.Client;
 import model.Order;
 import view.Data_Viewer_v;
@@ -167,7 +167,7 @@ public class Data_Viewer_c {
 		
 		clientTable = new Table(new String[] {"ID", "Teléfono",  "Último pedido", "Nº pedidos", "Total pedido"},
 				new Class<?>[] {Integer.class, String.class, String.class, Integer.class, BigDecimal.class},
-				new Integer[] {0, 300, 300, 300, 300},
+				new Integer[] {0, 200, 200, 200, 300},
 				null,
 				null,
 				null);

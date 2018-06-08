@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -117,8 +118,10 @@ public class Order_Manager_c {
 	
 	public void fillProductsTable() {
 		view.orderTable.modelo.setRowCount(0);
+		Image img = (new ImageIcon(Order_Manager_v.class.getResource("/images/info.png"))).getImage();
+		Image newImg = img.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon info = new ImageIcon(newImg);
 		for (Order_Line ol : order.lines) {
-			ImageIcon info = new ImageIcon(getClass().getResource("../images/info.png"));
 			view.orderTable.modelo.addRow(new Object[] {ol.product.product_id,
 					ol.quantity,
 					ol.product.code,
@@ -144,7 +147,8 @@ public class Order_Manager_c {
 	private void manageTable(int row, int column) {
 		switch (column) {
 		case 5: 
-			if (view.orderTable.getValueAt(row, column) != null) {
+			String s = order.lines.get(row).comment;
+			if (!(s == null || s.equals(""))) {
 				new Comment_Viewer(order.lines.get(row).comment, main, 2);
 			}
 			break;
@@ -155,7 +159,7 @@ public class Order_Manager_c {
 			break;
 			
 		case 7: 
-			order.removeProduct(order.lines.get(row), 1);
+			order.removeProductThroughTable(order.lines.get(row));
 			updateOrderData();
 			break;
 		}
@@ -175,16 +179,13 @@ public class Order_Manager_c {
 			@Override
 		     public void run() {
 		         view.console.grabFocus();
-		         view.console.requestFocus();//or inWindow
+		         view.console.requestFocus();
 		     }
 		});
 	}
 	
-	// TODO consola
-	
 	private void updatePriceSection() {
-		view.totalText.setText(order.getFinalPrice().toString());
-		
+		view.totalText.setText(BigDecimal.valueOf(Float.parseFloat(order.getFinalPrice().toString())).setScale(2, RoundingMode.DOWN).toString());
 		if (order.discount == 0) {
 			view.discountText.setVisible(false);
 			view.discountLabel.setVisible(false);
@@ -319,6 +320,15 @@ public class Order_Manager_c {
 		view.finishOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				insertOrder();
+			}
+		});
+		
+		view.resetData.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				view.newProductText.setText("");
+				view.newPriceText.setValue(null);
+				view.productComment.setText("");
 			}
 		});
 	}

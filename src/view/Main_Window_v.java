@@ -5,7 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import base_classes.Panel_Base;
+import utils.Panel_Base;
+import java.awt.Toolkit;
 
 public class Main_Window_v extends JFrame {
 	/**
@@ -18,6 +19,7 @@ public class Main_Window_v extends JFrame {
 	public JMenuItem menuAccounting;
 
 	public Main_Window_v() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Main_Window_v.class.getResource("/images/logo.png")));
 		menu();
 		setProperties();
 	}

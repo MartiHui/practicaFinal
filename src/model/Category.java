@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
-import base_classes.Model_Base;
+import utils.Model_Base;
 
 public class Category extends Model_Base {
 	private static String table_name = "categories";

@@ -5,8 +5,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import base_classes.Panel_Base;
 import controller.Main_Window_c;
+import utils.Panel_Base;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,12 +39,12 @@ public class Comment_Viewer extends JDialog {
 	private void properties() {
 		this.setTitle("Comentario");
 		this.setResizable(false);
-		this.setBounds(Panel_Base.centrar(500, 400));
+		this.setBounds(Panel_Base.centrar(460, 260));
 	}
 	
 	private void textElements(String s) {
 		JLabel commentLabel = new JLabel("Comentario:");
-		commentLabel.setBounds(10, 11, 77, 33);
+		commentLabel.setBounds(30, 20, 75, 30);
 		getContentPane().add(commentLabel);
 		
 		JTextArea commentText = new JTextArea();
@@ -54,14 +54,14 @@ public class Comment_Viewer extends JDialog {
 		commentText.setEditable(false);
 		
 		JScrollPane commentScrollPane = new JScrollPane();
-		commentScrollPane.setBounds(20, 55, 390, 132);
+		commentScrollPane.setBounds(30, 50, 390, 130);
 		commentScrollPane.setViewportView(commentText);
 		getContentPane().add(commentScrollPane);
 	}
 	
 	private void button(int panel) {
 		JButton okButton = new JButton("OK");
-		okButton.setBounds(117, 208, 89, 23);
+		okButton.setBounds(175, 191, 89, 23);
 		getContentPane().add(okButton);
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

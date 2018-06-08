@@ -6,10 +6,11 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import base_classes.Panel_Base;
-import base_classes.Table;
 import utils.DateLabelFormatter;
 import utils.Fecha;
+import utils.Panel_Base;
+import utils.Table;
+
 import javax.swing.JLabel;
 import java.math.BigDecimal;
 
@@ -17,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class Accounting_v extends Panel_Base {
 	
@@ -48,41 +50,47 @@ public class Accounting_v extends Panel_Base {
 	
 	private void info() {
 		JSeparator separator = new JSeparator();
-		separator.setBounds(1096, 382, 320, 50);
+		separator.setBounds(1078, 329, 332, 14);
 		add(separator);
 		
 		JLabel numLabel = new JLabel("N\u00BA pedidos: ");
-		numLabel.setBounds(1096, 474, 69, 14);
+		numLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		numLabel.setBounds(1078, 360, 131, 20);
 		add(numLabel);
 		
 		JLabel totalLabel = new JLabel("Total sin descuento: ");
-		totalLabel.setBounds(1096, 526, 100, 14);
+		totalLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		totalLabel.setBounds(1078, 410, 131, 20);
 		add(totalLabel);
 		
 		JLabel discountLabel = new JLabel("Total con descuento: ");
-		discountLabel.setBounds(1096, 589, 120, 14);
+		discountLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		discountLabel.setBounds(1078, 460, 131, 20);
 		add(discountLabel);
 		
 		numText = new JLabel("");
-		numText.setBounds(1237, 474, 120, 14);
+		numText.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		numText.setBounds(1219, 360, 191, 20);
 		add(numText);
 		
 		totalText = new JLabel("");
-		totalText.setBounds(1237, 526, 120, 14);
+		totalText.setBounds(1219, 410, 191, 20);
 		add(totalText);
 		
 		discountText = new JLabel("");
-		discountText.setBounds(1237, 589, 120, 14);
+		discountText.setBounds(1219, 460, 191, 20);
 		add(discountText);
 	}
 
 	private void date() {
 		fromLabel = new JLabel("");
-		fromLabel.setBounds(1078, 191, 46, 14);
+		fromLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		fromLabel.setBounds(1078, 175, 150, 30);
 		add(fromLabel);
 		
 		toLabel = new JLabel("Hasta: ");
-		toLabel.setBounds(1296, 191, 46, 14);
+		toLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		toLabel.setBounds(1260, 175, 150, 30);
 		add(toLabel);
 		
 		Properties p = new Properties();
@@ -96,7 +104,7 @@ public class Accounting_v extends Panel_Base {
 		
 		JDatePanelImpl dateFromPanel = new JDatePanelImpl(modelFrom,p);
 		dateFrom = new JDatePickerImpl(dateFromPanel, new DateLabelFormatter());
-		dateFrom.setBounds(1078,216,120,28);
+		dateFrom.setBounds(1078,216,150,28);
 		add(dateFrom);
 		
 		UtilDateModel modelTo = new UtilDateModel();
@@ -105,23 +113,23 @@ public class Accounting_v extends Panel_Base {
 		
 		JDatePanelImpl dateToPanel = new JDatePanelImpl(modelTo,p);
 		dateTo = new JDatePickerImpl(dateToPanel, new DateLabelFormatter());
-		dateTo.setBounds(1296,216,120,28);
+		dateTo.setBounds(1260,216,150,28);
 		add(dateTo);
 		
 		singleDate = new JButton("");
-		singleDate.setBounds(1078, 255, 123, 23);
+		singleDate.setBounds(1078, 255, 150, 30);
 		add(singleDate);
 		
 		warning = new JLabel("<html>La fecha final es<br />anterior a la inicial.</html>");
 		warning.setHorizontalAlignment(SwingConstants.CENTER);
-		warning.setBounds(1306, 248, 108, 30);
+		warning.setBounds(1260, 255, 150, 30);
 		warning.setVisible(false);
 		add(warning);
 	}
 	
 	private void table() {
 		JScrollPane ordersScrollPane = new JScrollPane();
-		ordersScrollPane.setBounds(43, 80, 1014, 770);
+		ordersScrollPane.setBounds(40, 80, 1000, 750);
 		add(ordersScrollPane);
 		
 		ordersTable = new Table(new String[] {"Mesa/Teléfono", "Fecha", "Total", "Descuento", "Precio final"},

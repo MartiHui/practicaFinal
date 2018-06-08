@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-import base_classes.Model_Base;
+import utils.Model_Base;
 
 public class Address extends Model_Base {
 	private static String table_name = "addresses";

@@ -9,9 +9,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import base_classes.KeyPad;
-import base_classes.Panel_Base;
-import base_classes.Table;
+import utils.KeyPad;
+import utils.Panel_Base;
+import utils.Table;
 
 public class Orders_Viewer_v extends Panel_Base {
 	/**

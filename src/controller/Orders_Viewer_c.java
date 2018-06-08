@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -11,6 +12,7 @@ import javax.swing.ImageIcon;
 import model.Order;
 import view.Orders_Viewer_v;
 import view.Comment_Viewer;
+import view.Order_Manager_v;
 
 public class Orders_Viewer_c {
 	public Main_Window_c main;
@@ -233,7 +235,9 @@ public class Orders_Viewer_c {
 	}
 	
 	private Object[] orderToTablerow(Order o, boolean isLocal) {
-		ImageIcon info = new ImageIcon(getClass().getResource("../images/info.png"));
+		Image img = (new ImageIcon(Order_Manager_v.class.getResource("/images/info.png"))).getImage();
+		Image newImg = img.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon info = new ImageIcon(newImg);
 		return new Object[] {isLocal?Integer.toString(o.num_table):o.client.phone_number,
 			o.date.stringReloj(),
 			o.getFinalPrice(),

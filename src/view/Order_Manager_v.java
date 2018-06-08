@@ -9,15 +9,17 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
-import base_classes.Panel_Base;
-import base_classes.Table;
 import model.Address;
 import model.Category;
 import model.Product;
+import utils.Panel_Base;
+import utils.Table;
 
 import java.awt.Insets;
 import javax.swing.JTextArea;
@@ -70,8 +72,11 @@ public class Order_Manager_v extends Panel_Base {
 	public JRadioButton paidCash;
 	public JRadioButton paidCard;
 
+	public JButton resetData;
+
 	public Order_Manager_v(boolean isLocal) {
 		super();
+		date.setLocation(1100, 10);
 		setLayout(null);
 
 		productsTable();
@@ -95,12 +100,12 @@ public class Order_Manager_v extends Panel_Base {
 	
 	private void productsTable() {
 		JScrollPane orderPane = new JScrollPane();
-		orderPane.setBounds(81, 173, 881, 671);
+		orderPane.setBounds(50, 170, 850, 700);
 		add(orderPane);
 		
 		orderTable = new Table(new String[] {"product_id", "Cantidad", "Código", "Producto", "Precio/ud", "Precio total", "Detalles", "", ""},
 				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, String.class, String.class, ImageIcon.class, String.class, String.class},
-				new Integer[] {0, 3, 3, 100, 125, 125, 3, 3, 3},
+				new Integer[] {0, 3, 3, 300, 30, 100, 3, 1, 1},
 				null,
 				null,
 				null);
@@ -110,7 +115,7 @@ public class Order_Manager_v extends Panel_Base {
 		orderTable.alinear('l', 2);
 		orderTable.alinear('r', 3);
 		orderTable.alinear('r', 4);
-		orderTable.alinear('c', 5);
+		orderTable.alinear('c', 6);
 		orderTable.alinear('c', 7);
 		
 		orderTable.tabla.getTableHeader().setEnabled(false);
@@ -120,7 +125,7 @@ public class Order_Manager_v extends Panel_Base {
 	private void orderComment() {
 		orderCommentButton = new JButton("Comentario: ");
 		orderCommentButton.setMargin(new Insets(2, 2, 2, 2));
-		orderCommentButton.setBounds(64, 121, 70, 42);
+		orderCommentButton.setBounds(50, 110, 70, 40);
 		add(orderCommentButton);
 		
 		orderCommentText = new JTextArea();
@@ -129,7 +134,7 @@ public class Order_Manager_v extends Panel_Base {
 		orderCommentText.setLineWrap(true);
 		
 		JScrollPane commentPane = new JScrollPane();
-		commentPane.setBounds(144, 121, 818, 42);
+		commentPane.setBounds(130, 110, 770, 40);
 		commentPane.setViewportView(orderCommentText);
 		add(commentPane);
 	}
@@ -137,104 +142,104 @@ public class Order_Manager_v extends Panel_Base {
 	private void console() {
 		console = new JTextField();
 		console.setBorder(new LineBorder(new Color(0, 0, 0)));
-		console.setBounds(972, 121, 458, 42);
+		console.setBounds(950, 110, 450, 40);
 		console.grabFocus();
 		add(console);
 		console.setColumns(10);
 		
-		JLabel consoleInfo = new JLabel("F1: Nuevo producto   F2: Nuevo precio  F3: Detalle de producto Enter: A\u00F1adir");
-		consoleInfo.setBounds(972, 173, 458, 14);
+		JLabel consoleInfo = new JLabel("F1: Nuevo producto           F2: Nuevo precio          F3: Detalle de producto         Enter: A\u00F1adir");
+		consoleInfo.setBounds(950, 161, 450, 20);
 		add(consoleInfo);
 	}
 	
 	private void separators() {
 		JSeparator separator = new JSeparator();
 		separator.setMinimumSize(new Dimension(10, 10));
-		separator.setBounds(972, 192, 458, 14);
+		separator.setBounds(950, 192, 450, 14);
 		add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setMinimumSize(new Dimension(10, 10));
-		separator_1.setBounds(972, 641, 458, 14);
+		separator_1.setBounds(950, 620, 450, 14);
 		add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setMinimumSize(new Dimension(10, 10));
-		separator_2.setBounds(972, 484, 458, 14);
+		separator_2.setBounds(950, 490, 450, 14);
 		add(separator_2);
 	}
 	
 	private void priceSection() {
 		JLabel totalLabel = new JLabel("TOTAL:");
-		totalLabel.setBounds(972, 512, 46, 14);
+		totalLabel.setBounds(950, 515, 200, 20);
 		add(totalLabel);
 		
 		totalText = new JLabel("");
 		totalText.setFont(new Font("Tahoma", Font.BOLD, 27));
-		totalText.setBounds(972, 537, 201, 60);
+		totalText.setBounds(950, 540, 200, 60);
 		add(totalText);
 		
 		discountLabel = new JLabel("DESCUENTO:");
-		discountLabel.setBounds(1183, 509, 82, 14);
+		discountLabel.setBounds(1175, 515, 200, 20);
 		add(discountLabel);
 		
 		discountText = new JLabel("");
 		discountText.setFont(new Font("Tahoma", Font.BOLD, 27));
-		discountText.setBounds(1174, 554, 201, 60);
+		discountText.setBounds(1175, 540, 200, 60);
 		add(discountText);
 	}
 	
 	private void productSection() {
 		categoryBox = new JComboBox<Category>();
-		categoryBox.setBounds(972, 217, 201, 60);
+		categoryBox.setBounds(950, 215, 215, 60);
 		add(categoryBox);
 		
 		productBox = new JComboBox<Product>();
-		productBox.setBounds(1183, 217, 247, 60);
+		productBox.setBounds(1183, 217, 215, 60);
 		add(productBox);
 		
 		plusQuantity = new JButton("+");
 		plusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		plusQuantity.setBounds(1116, 288, 60, 60);
+		plusQuantity.setBounds(1100, 290, 60, 60);
 		add(plusQuantity);
 		
 		minusQuantity = new JButton("-");
 		minusQuantity.setFont(new Font("Tahoma", Font.BOLD, 25));
-		minusQuantity.setBounds(972, 288, 60, 60);
+		minusQuantity.setBounds(950, 290, 60, 60);
 		add(minusQuantity);
 		
 		quantity = new JLabel("1");
 		quantity.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		quantity.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		quantity.setHorizontalAlignment(SwingConstants.CENTER);
-		quantity.setBounds(1041, 291, 65, 60);
+		quantity.setBounds(1025, 290, 60, 60);
 		add(quantity);
 		
 		// Alternative product data
 		JLabel newProductLabel = new JLabel("Nuevo producto:");
-		newProductLabel.setBounds(972, 374, 91, 14);
+		newProductLabel.setBounds(950, 375, 90, 20);
 		add(newProductLabel);
 		
 		JLabel newPriceLabel = new JLabel("Nuevo precio:");
-		newPriceLabel.setBounds(972, 399, 91, 14);
+		newPriceLabel.setBounds(950, 400, 90, 20);
 		add(newPriceLabel);
 		
 		JLabel productCommentLabel = new JLabel("Detalle:");
-		productCommentLabel.setBounds(972, 424, 91, 14);
+		productCommentLabel.setBounds(950, 425, 90, 20);
 		add(productCommentLabel);
 		
 		newProductText = new JTextField();
-		newProductText.setBounds(1073, 371, 347, 20);
+		newProductText.setBounds(1050, 375, 350, 20);
 		add(newProductText);
 		newProductText.setColumns(10);
 		
 		newPriceText = new JFormattedTextField(new BigDecimal(0));
-		newPriceText.setBounds(1073, 396, 347, 20);
+		newPriceText.setBounds(1050, 400, 350, 20);
 		add(newPriceText);
 		newPriceText.setValue(null);
 		
 		JScrollPane productCommentPane = new JScrollPane();
-		productCommentPane.setBounds(1073, 424, 347, 42);
+		productCommentPane.setBounds(1050, 425, 350, 50);
 		add(productCommentPane);
 		
 		productComment = new JTextArea();
@@ -242,59 +247,69 @@ public class Order_Manager_v extends Panel_Base {
 	}
 	
 	private void buttons() {
-		addProduct = new JButton("A\u00F1adir...");
+		addProduct = new JButton("A\u00F1adir");
 		addProduct.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		addProduct.setBounds(1183, 288, 237, 60);
+		addProduct.setBounds(1183, 290, 215, 60);
 		add(addProduct);
 		
 		addDiscount = new JButton("A\u00F1adir descuento");
-		addDiscount.setBounds(972, 666, 158, 76);
+		addDiscount.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		addDiscount.setBounds(950, 645, 215, 70);
 		add(addDiscount);
 		
 		eliminateOrder = new JButton("");
-		eliminateOrder.setBounds(1360, 11, 70, 58);
+		Image img = (new ImageIcon(Order_Manager_v.class.getResource("/images/thrash.png"))).getImage();
+		Image newImg = img.getScaledInstance(70, 50, java.awt.Image.SCALE_SMOOTH);
+		eliminateOrder.setIcon(new ImageIcon(newImg));
+		eliminateOrder.setBounds(50, 50, 70, 50);
 		add(eliminateOrder);
 		
 		ticket = new JButton("Sacar ticket");
-		ticket.setBounds(1140, 670, 158, 68);
+		ticket.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		ticket.setBounds(1175, 645, 215, 70);
 		add(ticket);
 		
 		finishOrder = new JButton("Finalizar pedido");
-		finishOrder.setBounds(1140, 752, 176, 92);
+		finishOrder.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		finishOrder.setBounds(1175, 730, 215, 70);
 		add(finishOrder);
+		
+		resetData = new JButton("Borrar");
+		resetData.setBounds(950, 455, 90, 23);
+		add(resetData);
 	}
 	
 	private void payMethod() {
 		JLabel lblFormaDePago = new JLabel("Forma de pago:");
-		lblFormaDePago.setBounds(999, 758, 83, 14);
+		lblFormaDePago.setBounds(1065, 726, 100, 20);
 		add(lblFormaDePago);
 		
 		paidCash = new JRadioButton("Efectivo");
 		buttonGroup.add(paidCash);
-		paidCash.setBounds(997, 779, 109, 23);
+		paidCash.setBounds(1065, 755, 100, 20);
 		add(paidCash);
 		
 		paidCard = new JRadioButton("Tarjeta");
 		buttonGroup.add(paidCard);
-		paidCard.setBounds(999, 805, 109, 23);
+		paidCard.setBounds(1065, 778, 100, 20);
 		add(paidCard);
 	}
 	
 	private void awayElements() {
 		JLabel phoneLabel = new JLabel("Tel\u00E9fono: ");
-		phoneLabel.setBounds(81, 22, 53, 14);
+		phoneLabel.setBounds(130, 52, 53, 14);
 		add(phoneLabel);
 		
 		phoneText = new JLabel("");
-		phoneText.setBounds(142, 22, 128, 14);
+		phoneText.setBounds(194, 50, 100, 20);
 		add(phoneText);
 		
 		JLabel addressLabel = new JLabel("Calle: ");
-		addressLabel.setBounds(81, 50, 46, 14);
+		addressLabel.setBounds(130, 85, 46, 14);
 		add(addressLabel);
 		
 		addressBox = new JComboBox<Address>();
-		addressBox.setBounds(123, 50, 436, 20);
+		addressBox.setBounds(164, 82, 416, 20);
 		add(addressBox);
 		
 		addressComment = new JTextArea();
@@ -303,26 +318,29 @@ public class Order_Manager_v extends Panel_Base {
 		addressComment.setLineWrap(true);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(593, 50, 350, 42);
+		scrollPane.setBounds(586, 50, 314, 49);
 		scrollPane.setViewportView(addressComment);
 		add(scrollPane);
 		
 		modifyAddress = new JButton("Modificar calle");
-		modifyAddress.setBounds(123, 80, 135, 23);
+		modifyAddress.setBounds(304, 50, 130, 20);
 		add(modifyAddress);
 		
 		addAddress = new JButton("Nueva calle");
-		addAddress.setBounds(266, 80, 125, 23);
+		addAddress.setBounds(450, 49, 130, 20);
 		add(addAddress);
 	}
 	
 	private void localElements() {
 		numTableText = new JLabel("");
-		numTableText.setBounds(160, 37, 46, 14);
+		numTableText.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		numTableText.setBounds(240, 50, 100, 50);
 		add(numTableText);
 		
 		JLabel tableLabel = new JLabel("Mesa n\u00BA: ");
-		tableLabel.setBounds(102, 37, 46, 14);
+		tableLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		tableLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		tableLabel.setBounds(130, 50, 100, 50);
 		add(tableLabel);
 	}
 }

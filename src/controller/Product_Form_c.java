@@ -41,8 +41,8 @@ public class Product_Form_c {
 		if (p != null) {
 			view.nameText.setText(p.product_name);
 			view.categoryBox.setSelectedIndex(p.category.category_id-1);
-			view.localText.setText(p.price_local.toString());
-			view.awayText.setText(p.price_away.toString());
+			view.localText.setValue(p.price_local);
+			view.awayText.setValue(p.price_away);
 		} else {
 			view.delete.setEnabled(false);
 		}
