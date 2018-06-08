@@ -19,7 +19,7 @@ public class DB_Connection {
 	
 	public static Connection con = null;
 	
-	private static String connection = "casa.properties";
+	private static String connection = "connection.properties";
 	
 	public static void loadData() {
 		Properties prop = new Properties();

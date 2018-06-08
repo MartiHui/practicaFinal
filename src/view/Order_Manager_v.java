@@ -105,7 +105,7 @@ public class Order_Manager_v extends Panel_Base {
 		
 		orderTable = new Table(new String[] {"product_id", "Cantidad", "Código", "Producto", "Precio/ud", "Precio total", "Detalles", "", ""},
 				new Class<?>[] {Integer.class, Integer.class, String.class, String.class, String.class, String.class, ImageIcon.class, String.class, String.class},
-				new Integer[] {0, 3, 3, 300, 30, 100, 3, 1, 1},
+				new Integer[] {0, 3, 3, 300, 100, 100, 3, 1, 1},
 				null,
 				null,
 				null);
@@ -147,7 +147,9 @@ public class Order_Manager_v extends Panel_Base {
 		add(console);
 		console.setColumns(10);
 		
-		JLabel consoleInfo = new JLabel("F1: Nuevo producto           F2: Nuevo precio          F3: Detalle de producto         Enter: A\u00F1adir");
+		JLabel consoleInfo = new JLabel("F1: Nuevo producto          F2: Nuevo precio         F3: Detalle de producto        Enter: A\u00F1adir");
+		consoleInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		consoleInfo.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		consoleInfo.setBounds(950, 161, 450, 20);
 		add(consoleInfo);
 	}

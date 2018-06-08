@@ -242,7 +242,8 @@ public class Orders_Viewer_c {
 			o.date.stringReloj(),
 			o.getFinalPrice(),
 			(o.comment==null||o.comment.equals(""))?null:info,
-			o.comment};
+			o.comment,
+			o.ticketOut};
 	}
 
 }

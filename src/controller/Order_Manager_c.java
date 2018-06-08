@@ -286,7 +286,7 @@ public class Order_Manager_c {
 	private void buttons() {
 		view.addProduct.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addProduct();
+				addProductByConsole();
 			}
 		});
 		
@@ -375,13 +375,45 @@ public class Order_Manager_c {
 		exit();
 	}
 	
-	private void addProduct() {
+	private void addProductByConsole() {
 		Order_Line ol;
 		Product product;
-		String comment = "";
+		String comment = (stringEmpty(view.productComment.getText())?"":view.productComment.getText());
 		BigDecimal price = (BigDecimal) view.newPriceText.getValue();
-		int quantity;
+		int quantity = Integer.parseInt(view.quantity.getText());
 		
+		
+		if (stringEmpty(view.console.getText())) {
+			addProductNormally(price, comment, quantity);
+		} else {
+			try {
+				String command = view.console.getText();
+				if (command.contains("+")) { 
+					String[] s = command.split("\\+");
+					product = Product.load(Integer.parseInt(s[0])); 
+					quantity = Integer.parseInt(s[1]); 
+					ol = getOrderLine(product, comment, quantity, price);
+					order.addProduct(ol);
+				} else { System.out.println("+ no detectado");
+					product = Product.load(Integer.parseInt(command));
+					quantity = 1;
+					ol = getOrderLine(product, comment, quantity, price);
+					order.addProduct(ol);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		view.console.setText("");
+		resetAlternativeData();
+		
+		updateOrderData();
+	}
+	
+	private void addProductNormally(BigDecimal price, String comment, int quantity) {
+		Order_Line ol;
+		Product product;
 		
 		if (!stringEmpty(view.newProductText.getText())) {
 			product = Product.insert(new Object[] {
@@ -392,33 +424,19 @@ public class Order_Manager_c {
 			product = ((Product) view.productBox.getSelectedItem());
 		}
 		
-		if (stringEmpty(view.console.getText())) {
-			quantity = Integer.parseInt(view.quantity.getText());
-		} else {
-			try {
-				quantity = Integer.parseInt(view.console.getText());
-			} catch (Exception e) {
-				quantity = Integer.parseInt(view.quantity.getText());
-			}
-		}
-		
-		if (!stringEmpty(view.productComment.getText())) {
-			comment = view.productComment.getText();
-		}
-		
-		if (price == null) {
-			ol = new Order_Line(this.order, product, comment,
-					quantity, this.order.isLocal);
-		} else {
-			ol = new Order_Line(this.order, product, comment,
-					quantity, price);
-		}
-		
-		view.console.setText("");
-		resetAlternativeData();
+		ol = getOrderLine(product, comment, quantity, price);
 		
 		this.order.addProduct(ol);
-		updateOrderData();
+	}
+	
+	private Order_Line getOrderLine(Product product, String comment, int quantity, BigDecimal price) {
+		if (price == null) {
+			return new Order_Line(this.order, product, comment,
+					quantity, this.order.isLocal);
+		} else {
+			return new Order_Line(this.order, product, comment,
+					quantity, price);
+		}
 	}
 	
 	private void updateOrderData() {
@@ -428,7 +446,7 @@ public class Order_Manager_c {
 	
 	public void consoleEvent(int ascii) {
 		if (ascii == 10) {
-			addProduct();
+			addProductByConsole();
 		}
 	}
 	

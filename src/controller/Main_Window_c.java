@@ -49,7 +49,7 @@ public class Main_Window_c {
 							orderManager.newProduct();
 						} else if (e.getKeyCode() == KeyEvent.VK_F2) {
 							orderManager.newPrice();
-						} else if (e.getKeyCode() == KeyEvent.VK_F2) {
+						} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 							orderManager.newComment();
 						} else {
 							orderManager.consoleEvent(e.getKeyChar());

@@ -11,7 +11,7 @@ import javax.swing.SwingConstants;
 
 import utils.KeyPad;
 import utils.Panel_Base;
-import utils.Table;
+import utils.Table_Orders;
 
 public class Orders_Viewer_v extends Panel_Base {
 	/**
@@ -20,9 +20,9 @@ public class Orders_Viewer_v extends Panel_Base {
 	private static final long serialVersionUID = 4185438257464370072L;
 	
 	public JScrollPane localPane;
-	public Table localTable;
+	public Table_Orders localTable;
 	public JScrollPane awayPane;
-	public Table awayTable;
+	public Table_Orders awayTable;
 	
 	public JTextField console;
 	
@@ -54,15 +54,14 @@ public class Orders_Viewer_v extends Panel_Base {
 		int initialX = 0;
 		int initialY = 50;
 		int separator = (1100 - 2*width)/3;
-		int column = (width/4)-1;
 		
 		localPane = new JScrollPane();
 		localPane.setBounds(initialX + separator, initialY, width, height);
 		add(localPane);
 		
-		localTable = new Table(new String[] {"Mesa nº", "Hora", "Total", "Detalles", "comment"},
-				new Class<?>[] {String.class, String.class, BigDecimal.class,  ImageIcon.class, String.class},
-				new Integer[] {column, column, column, column, 0},
+		localTable = new Table_Orders(new String[] {"Mesa nº", "Hora", "Total", "Detalles", "comment", "ticketOut"},
+				new Class<?>[] {String.class, String.class, BigDecimal.class,  ImageIcon.class, String.class, Boolean.class},
+				new Integer[] {150, 75, 75, 75, 0, 0},
 				null,
 				null,
 				null);
@@ -70,21 +69,23 @@ public class Orders_Viewer_v extends Panel_Base {
 		localTable.alinear('c', 1);
 		localTable.alinear('c', 2);
 		localTable.hideColumn(4);
+		localTable.hideColumn(4);
 		localPane.setViewportView(localTable.tabla);
 		
 		awayPane = new JScrollPane();
 		awayPane.setBounds(initialX + width + 2*separator, initialY, width, height);
 		add(awayPane);
 		
-		awayTable = new Table(new String[] {"Teléfono", "Hora", "Total", "Detalles", "comment"},
-				new Class<?>[] {String.class, String.class, BigDecimal.class,  ImageIcon.class, String.class},
-				new Integer[] {column, column, column, column},
+		awayTable = new Table_Orders(new String[] {"Teléfono", "Hora", "Total", "Detalles", "comment", "ticketOut"},
+				new Class<?>[] {String.class, String.class, BigDecimal.class,  ImageIcon.class, String.class, Boolean.class},
+				new Integer[] {150, 75, 75, 75, 0, 0},
 				null,
 				null,
 				null);
 		awayTable.alinear('c', 0);
 		awayTable.alinear('c', 1);
 		awayTable.alinear('c', 2);
+		awayTable.hideColumn(4);
 		awayTable.hideColumn(4);
 		awayPane.setViewportView(awayTable.tabla);
 		
